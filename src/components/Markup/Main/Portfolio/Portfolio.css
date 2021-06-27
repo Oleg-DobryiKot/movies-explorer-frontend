@@ -1,0 +1,52 @@
+.portfolio {
+  max-width: 100%;
+  background: #202020;
+  padding-bottom: 105px;
+}
+
+.portfolio__title {
+  margin: 0 70px;
+  padding-bottom: 30px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 20px;
+  color: #8B8B8B;
+}
+
+.portfolio__menu {
+  margin: 0 70px;
+  display: flex;
+  flex-direction: column; 
+}
+
+.portfolio__menu_project {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 90px;
+  border-bottom: #424242 1px solid;
+}
+
+.portfolio__menu_project:last-of-type {
+  border-bottom: none;
+}
+
+.portfolio__menu_project-name {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 30px;
+  line-height: 50px;
+  letter-spacing: -0.04em;
+}
+
+.portfolio__menu_project-icon {
+  text-decoration: none;
+  color: #fff;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 30px;
+  line-height: 60px;
+  letter-spacing: -0.04em;
+}

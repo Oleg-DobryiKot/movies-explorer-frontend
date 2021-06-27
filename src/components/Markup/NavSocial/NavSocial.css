@@ -1,0 +1,17 @@
+.nav-social_menu {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.nav-social_menu-links {
+  list-style-type: none;
+}
+
+.nav-social_menu-link {
+  text-decoration: none;
+  color: #fff;
+  margin-right: 20px;
+}

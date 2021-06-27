@@ -1,0 +1,77 @@
+.profile {
+  display: flex;
+  flex-direction: column;
+  padding-top: 60px;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile__welcome {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 29px;
+  width: 396px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: calc(153px - (32px + 14px));
+}
+
+.profile__account {
+  width: calc(141px + 122px + 147px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile__account-field {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border: none;
+  width: 100%;
+  height: calc(14px + 32px);
+}
+
+.profile__account-field:last-of-type { 
+  border-top: 1px solid #424242;
+}
+
+.profile__account-field_name {
+  font-weight: 500;
+  font-size: 11px;
+  line-height: 13px;
+}
+
+.profile__account-field_data {
+  font-weight: normal;
+  font-size: 11px;
+  line-height: 13px;
+}
+
+.profile__edit {
+  margin-top: calc(251px - (32px + 14px));
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 16px;
+}
+
+.profile__edit:hover {
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+.profile__logout {
+  margin-top: 16px;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 16px;
+  color: #EE3465;
+}
+
+.profile__logout:hover {
+  cursor: pointer;
+  color: brown;
+}

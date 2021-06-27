@@ -1,0 +1,126 @@
+.login {
+  display: flex;
+  flex-direction: column;
+  padding-top: 60px;
+  justify-content: center;
+  align-items: center;
+}
+
+.login__logo {
+  width: 38px;
+  height: 38px;
+  margin-bottom: 40px;
+}
+
+.login__welcome {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 29px;
+  width: 396px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 40px;
+}
+
+.login__field {
+  width: 396px;
+  border: none;
+  margin: 0;
+  padding: 0 0 12px 0;
+}
+
+.login__label {
+  font-size: 10px;
+  line-height: 12px;
+  color: #8B8B8B;
+}
+
+.login__form {
+  display: contents;
+}
+
+.login__input {
+  background: transparent;
+  display: block;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+  color: #FFFFFF;
+  border: 0;
+  border-bottom: 1px solid #424242;
+  width: 100%;
+  max-width: 396px;
+  height: 35px;
+  padding: 0;
+}
+
+.login__input::placeholder {
+  color: rgb(255, 255, 255);
+}
+
+.login__button-container {
+  margin-top: calc(221px - 24px);
+  border-radius: 3px;
+  height: 45px;
+  width: 100%;
+  max-width: 396px;
+  color: #000;
+  box-sizing: border-box;
+}
+
+.login__button-submit {
+  background: #4285F4;
+  border-radius: 3px;
+  height: 45px;
+  width: 100%;
+  max-width: 396px;
+  color: #fff;
+  font-size: 18px;
+  line-height: 22px;
+  text-align: center;
+  box-sizing: border-box;
+  border: none;
+}
+
+.login__button-submit:hover {
+  background: #4285F4;
+  cursor: pointer;
+}
+
+.login__signin {
+  width: 100%;
+  max-width: 358px;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  margin-top: 15px;
+  font-size: 14px;
+  line-height: 17px;
+  text-align: center;
+  color: #8B8B8B;
+}
+
+.login__link {
+  font-size: 16px;
+  font-style: normal;
+  line-height: 1.1;
+  color: #4285F4;
+  margin-left: 10px;
+}
+
+.login__link {
+  cursor: pointer;
+  opacity: 0.6;
+}
+
+.login__error {
+  font-size: 10px;
+  line-height: 12px;
+  visibility: hidden;
+  color: #f00;
+}
+
+.login__error_visible {
+  visibility: visible;
+}
