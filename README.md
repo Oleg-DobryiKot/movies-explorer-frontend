@@ -20,7 +20,7 @@ Copyright © 2021 [Олег Матвеев](https://github.com/Oleg-DobryiKot).
 	  Поэтому при клике на логотип осуществляется не только переход на главную, но и переключение 
 	  меню. Это временное явление.
 	Верстка осуществлялась по данному макету:
-	### [Макет в фигме](https://www.figma.com/file/M2v59G6tyigkLIt4sRAn8d/Diploma-(Copy)?node-id=891%3A3857)
+###   [Макет в фигме:](https://www.figma.com/file/M2v59G6tyigkLIt4sRAn8d/Diploma-(Copy)?node-id=891%3A3857)
 
 **Картинки**
 
