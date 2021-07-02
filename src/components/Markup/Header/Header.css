@@ -45,6 +45,11 @@
 
 .header__navbar-links:last-of-type {
   margin-right: 0;
+  margin-left: 145px;
+}
+
+.header__navbar-links_active {
+  visibility: hidden;
 }
 
 .header__navbar-link {
@@ -123,8 +128,13 @@ label {cursor: pointer; display: none;}
     padding-top: 150px;
   }
 
+  .header__navbar-links_active {
+    visibility: visible;
+  }
+
   .header__navbar-links:last-of-type {
     margin-top: 50vh;
+    margin-left: 0;
   }
 
   .header__mobinav {user-select: none;}
@@ -162,6 +172,7 @@ label {cursor: pointer; display: none;}
     transition: transform .3s;
     will-change: transform;
     backface-visibility: hidden;
+    /* z-index: 10; */
   }
 
   .header__menu_item {  
