@@ -96,3 +96,25 @@
   padding-top: 6px;
   border-top: 1px solid #424242;
 }
+
+@media screen and (min-width: 640px) and (max-width: 899px) {
+  .movie-card {
+    max-width: 339px;
+    position: relative;
+  }
+
+  .movie-card__image {
+    height: 190px;
+  }
+}
+
+@media screen and (min-width: 320px) and (max-width: 639px) {
+  .movie-card {
+    max-width: 300px;
+    position: relative;
+  }
+
+  .movie-card__image {
+    height: 168px;
+  }
+}

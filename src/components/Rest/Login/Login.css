@@ -124,3 +124,22 @@
 .login__error_visible {
   visibility: visible;
 }
+
+@media screen and (min-width: 320px) and (max-width: 639px) {
+  .login__welcome {
+    width: auto;
+  }
+
+  .login__logo_link {
+    align-self: center;
+  }
+
+  .login__field {
+    width: calc(100% - 2 * 30px);
+  }
+
+  .login__button-container {
+    width: calc(100% - 2 * 30px);
+  }
+}
+

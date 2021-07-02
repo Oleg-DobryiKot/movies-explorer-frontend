@@ -13,9 +13,7 @@
 .about-me__title {
   color: #fff;
   line-height: 27px;
-  font-style: normal;
   font-weight: 400;
-  font-family: Inter, sans-serif;
   font-size: 22px;
   letter-spacing: -0.04em;
   margin: 0;
@@ -41,8 +39,6 @@
 
 .about-me__profile_name {
   margin: 0;
-  font-family: Inter, sans-serif;
-  font-style: normal;
   font-weight: normal;
   font-size: 50px;
   line-height: 58px;
@@ -51,8 +47,6 @@
 
 .about-me__profile_profession {
   margin: 18px 0 26px 0;
-  font-family: Inter;
-  font-style: normal;
   font-weight: 500;
   font-size: 18px;
   line-height: 20px;
@@ -60,9 +54,6 @@
 
 .about-me__profile_description {
   margin: 0 auto 100px;
-  font-family: Inter, sans-serif;
-  font-style: normal;
-  font-weight: normal;
   font-size: 14px;
   line-height: 22px;
 }
@@ -71,4 +62,96 @@
   width: 270px;
   height: 327px;
   border-radius: 10px;
+}
+
+@media screen and (min-width: 900px) and (max-width: 1279px) {
+  .about-me {
+    padding: 100px 0;
+  }
+
+  .about-me__content {
+    width: calc(100% - 2 * 60px);
+  }
+}
+
+@media screen and (min-width: 640px) and (max-width: 899px) {
+  .about-me {
+    padding: 90px 0;
+  }
+
+  .about-me__content {
+    width: calc(100% - 2 * 50px);
+  }
+
+  .about-me__profile_name {
+    font-size: 40px;
+    line-height: 40px; 
+  }
+
+  .about-me__profile_profession {
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  .about-me__profile_text {
+    max-width: 364px;
+  }
+
+  .about-me__profile_description {
+    margin: 0 auto 87px;
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  .about-me__photo {
+    width: 255px;
+    height: 307px;
+  }
+}
+
+@media screen and (min-width: 320px) and (max-width: 639px) {
+  .about-me {
+    padding: 70px 0;
+  }
+
+  .about-me__content {
+    width: calc(100% - 2 * 14px);
+  }
+
+  .about-me__title {
+    font-size: 18px;
+    line-height: 22px;
+  }
+
+  .about-me__profile {
+    padding-top: 60px;
+    flex-direction: column;
+    flex-flow: column-reverse;
+  }
+
+  .about-me__profile_name {
+    font-size: 30px;
+    line-height: 36px;
+    margin-top: 40px;
+  }
+
+  .about-me__profile_profession {
+    font-size: 11px;
+    line-height: 16px;
+  }
+
+  .about-me__profile_text {
+    max-width: 292px;
+  }
+
+  .about-me__profile_description {
+    margin: 0 auto 40px;
+    font-size: 11px;
+    line-height: 16px;
+  }
+
+  .about-me__photo {
+    width: 292px;
+    height: 352px;
+  }
 }

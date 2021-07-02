@@ -10,15 +10,15 @@ function Portfolio() {
       <nav className="portfolio__menu"> 
         <div className="portfolio__menu_project">
           <p className="portfolio__menu_project-name">Статичный сайт</p>
-          <Link to="/" className="portfolio__menu_project-icon">{ '↗' }</Link>         
+          <Link to="https://oleg-dobryikot.github.io/how-to-learn/" className="portfolio__menu_project-icon">{ '↗' }</Link>         
         </div>
         <div className="portfolio__menu_project">
           <p className="portfolio__menu_project-name">Адаптивный сайт</p>
-          <Link to="/" className="portfolio__menu_project-icon">{ '↗' }</Link>         
+          <Link to="https://oleg-dobryikot.github.io/russian-travel/index.html" className="portfolio__menu_project-icon">{ '↗' }</Link>         
         </div>
         <div className="portfolio__menu_project">
           <p className="portfolio__menu_project-name">Одностраничное приложение</p>
-          <Link to="/" className="portfolio__menu_project-icon">{ '↗' }</Link>         
+          <Link to="https://oleg-matveev.students.nomoredomains.icu" className="portfolio__menu_project-icon">{ '↗' }</Link>         
         </div>
       </nav>
     </section>

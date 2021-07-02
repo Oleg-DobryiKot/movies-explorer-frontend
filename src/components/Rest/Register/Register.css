@@ -124,3 +124,21 @@
 .register__error_visible {
   visibility: visible;
 }
+
+@media screen and (min-width: 320px) and (max-width: 639px) {
+  .register__welcome {
+    width: auto;
+  }
+
+  .register__logo_link {
+    align-self: center;
+  }
+
+  .register__field {
+    width: calc(100% - 2 * 30px);
+  }
+
+  .register__button-container {
+    width: calc(100% - 2 * 30px);
+  }
+}

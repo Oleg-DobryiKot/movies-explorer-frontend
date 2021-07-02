@@ -40,7 +40,7 @@
 @media screen and (min-width: 900px) and (max-width: 1279px) {
   .movie-cards {
     width: 100%;
-    max-width: 882px;
+    max-width: calc(100% - 2* 50px);
     gap: 16px;
   }
 }
@@ -48,7 +48,7 @@
 @media screen and (min-width: 640px) and (max-width: 899px) {
   .movie-cards {
     width: 100%;
-    max-width: 600px;
+    max-width: calc(100% - 2* 30px);
     gap: 14px;
   }
 }
@@ -57,6 +57,10 @@
   .movie-cards {
     width: 100%;
     margin: 36px auto 0;
-    max-width: 284px;
+    max-width: calc(100% - 2* 10px);
+  }
+
+  .movie-cards__button-more {
+    width: 240px;
   }
 }

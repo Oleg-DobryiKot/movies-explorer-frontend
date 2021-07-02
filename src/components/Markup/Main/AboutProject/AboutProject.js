@@ -1,9 +1,10 @@
 import './AboutProject.css';
+import { PROJECT_ANCHOR_ID } from '../../../../constants/anchor-links';
 
 function AboutProject() {
 
   return (
-    <section className="about-project">
+    <section className="about-project" id={ PROJECT_ANCHOR_ID }>
       <div className="about-project__content">
         <h2 className="about-project__title">О проекте</h2>
         <div className="about-project__divider"></div>

@@ -147,3 +147,35 @@
 .search__checkbox.focused .search__checkbox-switch:before {
 	box-shadow: inset 0px 0px 4px #ff5623;
 }
+
+@media screen and (min-width: 900px) and (max-width: 1279px) {
+  .search__form {
+    width: calc(100% - 2 * 50px);
+    max-width: calc(100% - 2 * 50px);
+  }
+}
+
+@media screen and (min-width: 640px) and (max-width: 899px) {
+  .search__form {
+    width: calc(100% - 2 * 30px);
+    max-width: 708px;
+  }
+
+  .search__input {
+    width: calc(100% - 2 * 30px - 20px);
+  }
+  
+}
+
+@media screen and (min-width: 320px) and (max-width: 639px) {
+  .search__form {
+    width: calc(100% - 2 * 14px);
+    max-width: calc(100% - 2 * 14px);
+  }
+
+  .search__input {
+    height: 44px;
+    width: calc(100% - 2 * 14px - 36px);  
+    padding-left: 10px;
+  }
+}

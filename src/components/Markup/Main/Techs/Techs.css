@@ -13,10 +13,8 @@
 .techs__title {
   color: #fff;
   line-height: 27px;
-  font-style: normal;
-  font-weight: 400;
-  font-family: Inter, sans-serif;
   font-size: 22px;
+  font-weight: normal;
   letter-spacing: -0.04em;
   margin: 0;
 }
@@ -38,10 +36,8 @@
   max-width: 600px;
   color: #fff;
   line-height: 58px;
-  font-style: normal;
-  font-weight: 400;
-  font-family: Inter, sans-serif;
   font-size: 50px;
+  font-weight: normal;
   letter-spacing: -0.04em;
   padding-top: 90px;
   margin: 0;
@@ -51,9 +47,6 @@
   max-width: 460px;
   color: #fff;
   line-height: 20px;
-  font-style: normal;
-  font-weight: 400;
-  font-family: Inter, sans-serif;
   font-size: 14px;
   text-align: center;
   padding: 26px 0 100px 0;
@@ -78,12 +71,68 @@
   margin: 0 5px;
 }
 
+.techs__navbar-btn:hover {
+  transform: scale(1.1);
+}
+
 .techs__navbar-btn_text {
   text-decoration: none;
   color: #fff;
   line-height: 17px;
-  font-style: normal;
   font-weight: 500;
-  font-family: Inter, sans-serif;
   font-size: 14px;
+}
+
+@media screen and (min-width: 900px) and (max-width: 1279px) {
+  .techs {
+    padding: 100px 0;
+  }
+
+  .techs__content {
+    width: calc(100% - 2 * 60px);
+  }
+}
+
+@media screen and (min-width: 640px) and (max-width: 899px) {
+  .techs {
+    padding: 90px 0;
+  }
+
+  .techs__content {
+    width: calc(100% - 2 * 50px);
+  } 
+}
+
+@media screen and (min-width: 320px) and (max-width: 639px) {
+  .techs {
+    padding: 70px 0;
+  }
+
+  .techs__content {
+    width: calc(100% - 2 * 14px);
+    padding: 0 4px;
+  }
+
+  .techs__title {
+    line-height: 22px;
+    font-size: 18px;
+  }
+
+  .techs__subtitle {
+    padding-top: 60px;
+    line-height: 36px;
+    font-size: 30px;
+  }
+
+  .techs__text {
+    line-height: 16px;
+    font-size: 11px;
+    padding: 24px 0 50px 0;
+  }
+
+  .techs__navbar {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 90px 90px;
+  }
 }

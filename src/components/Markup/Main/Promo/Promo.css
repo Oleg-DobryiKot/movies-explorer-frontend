@@ -10,7 +10,6 @@
   width: calc(100% - 2 * 40px);
   max-width: 1200px;
   margin: 20px auto 0;
-  height: 493px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -23,12 +22,11 @@
   max-width: 730px;
   color: #fff;
   line-height: 58px;
-  font-style: normal;
-  font-weight: 400;
-  font-family: Inter, sans-serif;
   font-size: 50px;
+  font-weight: normal;
   text-align: center;
   padding-top: 160px;
+  padding-bottom: 151px;
   margin: 0;
   letter-spacing: -0.04em
 }
@@ -51,12 +49,59 @@
   margin: 0 5px;
 }
 
+.promo__navbar-btn:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+}
+
 .promo__navbar-btn_text {
   text-decoration: none;
   color: #fff;
   line-height: 16px;
-  font-style: normal;
   font-weight: 500;
-  font-family: Inter, sans-serif;
   font-size: 12px;
+}
+
+@media screen and (min-width: 900px) and (max-width: 1279px) {
+  .promo__banner {
+    width: calc(100% - 2 * 30px);
+  }
+}
+
+@media screen and (min-width: 640px) and (max-width: 899px) {
+  .promo__banner {
+    width: calc(100% - 2 * 20px);
+  }
+
+  .promo__title {
+    max-width: 680px;
+    line-height: 52px;
+    font-size: 40px;
+    padding-top: 350px;
+    padding-bottom: 315px;
+  }
+}
+
+@media screen and (min-width: 320px) and (max-width: 639px) {
+  .promo__banner {
+    width: calc(100% - 2 * 14px);
+  }
+
+  .promo__title {
+    max-width: 292px;
+    line-height: 37px;
+    font-size: 29px;
+    padding-top: 220px;
+    padding-bottom: 212px;
+  }
+
+  .promo__navbar-btn {
+    width: 82px;
+    height: 26px;
+    border-radius: 6px;
+  }
+  
+  .promo__navbar-btn_text { 
+    font-size: 10px;
+  }
 }

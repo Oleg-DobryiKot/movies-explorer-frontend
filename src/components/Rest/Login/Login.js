@@ -22,7 +22,7 @@ export default function Login() {
     return(
       <div className="login">
         <p className="login__welcome">
-          <Link to="/">
+          <Link to="/" className="login__logo_link">
             <img
               className="login__logo"
               src={ logo }

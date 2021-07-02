@@ -1,11 +1,12 @@
 import './AboutMe.css';
 import NavSocial from '../../NavSocial/NavSocial';
 import myPhoto from '../../../../images/myPhoto.jpg';
+import { STUDENT_ANCHOR_ID } from '../../../../constants/anchor-links';
 
 function AboutMe() {
 
   return (
-    <section className="about-me">
+    <section className="about-me" id={ STUDENT_ANCHOR_ID }>
       <div className="about-me__content">
         <h2 className="about-me__title">Студент</h2>
         <div className="about-me__divider"></div>

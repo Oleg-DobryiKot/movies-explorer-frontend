@@ -23,7 +23,7 @@ export default function Register() {
   return (
     <div className="register">
       <p className="register__welcome">
-        <Link to="/" >
+        <Link to="/" className="register__logo_link">
           <img
             className="register__logo"
             src={ logo }

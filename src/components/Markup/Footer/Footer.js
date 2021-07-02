@@ -7,7 +7,7 @@ function Footer() {
       <p className="footer__title">Учебный проект Яндекс.Практикум х BeatFilm.</p>
       <div className="footer__nav">
         <p className="footer__copyright">&copy; 2021</p>
-        <NavSocial/>
+        <NavSocial isFooter = {true} />
       </div>
     </footer>   
   )

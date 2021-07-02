@@ -1,9 +1,10 @@
 import './Techs.css';
+import { TECHNO_ANCHOR_ID } from '../../../../constants/anchor-links';
 
 function Techs() {
 
   return (  
-    <section className="techs">
+    <section className="techs" id={ TECHNO_ANCHOR_ID }>
       <div className="techs__content">
         <h2 className="techs__title">Технологии</h2>
         <div className="techs__divider"></div>
