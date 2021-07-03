@@ -1,0 +1,144 @@
+.register {
+  display: flex;
+  flex-direction: column;
+  padding-top: 60px;
+  justify-content: center;
+  align-items: center;
+}
+
+.register__logo {
+  width: 38px;
+  height: 38px;
+  margin-bottom: 40px;
+}
+
+.register__welcome {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 29px;
+  width: 396px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 40px;
+}
+
+.register__field {
+  width: 396px;
+  border: none;
+  margin: 0;
+  padding: 0 0 12px 0;
+}
+
+.register__label {
+  font-size: 10px;
+  line-height: 12px;
+  color: #8B8B8B;
+}
+
+.register__form {
+  display: contents;
+}
+
+.register__input {
+  background: transparent;
+  display: block;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+  color: #FFFFFF;
+  border: 0;
+  border-bottom: 1px solid #424242;
+  width: 100%;
+  max-width: 396px;
+  height: 35px;
+  padding: 0;
+}
+
+.register__input::placeholder {
+  color: rgb(255, 255, 255);
+}
+
+.register__button-container {
+  margin-top: calc(152px - 24px);
+  border-radius: 3px;
+  height: 45px;
+  width: 100%;
+  max-width: 396px;
+  color: #000;
+  box-sizing: border-box;
+}
+
+.register__button-submit {
+  background: #4285F4;
+  border-radius: 3px;
+  height: 45px;
+  width: 100%;
+  max-width: 396px;
+  color: #fff;
+  font-size: 18px;
+  line-height: 22px;
+  text-align: center;
+  box-sizing: border-box;
+  border: none;
+}
+
+.register__button-submit:hover {
+  background: #4285F4;
+  cursor: pointer;
+}
+
+.register__signin {
+  width: 100%;
+  max-width: 358px;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  margin-top: 15px;
+  font-size: 14px;
+  line-height: 17px;
+  text-align: center;
+  color: #8B8B8B;
+}
+
+.register__link {
+  font-size: 16px;
+  font-style: normal;
+  line-height: 1.1;
+  color: #4285F4;
+  margin-left: 10px;
+}
+
+.register__link:hover {
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+.register__error {
+  font-size: 10px;
+  line-height: 12px;
+  visibility: hidden;
+  color: #f00;
+}
+
+.register__error_visible {
+  visibility: visible;
+}
+
+@media screen and (min-width: 320px) and (max-width: 639px) {
+  .register__welcome {
+    width: auto;
+  }
+
+  .register__logo_link {
+    align-self: center;
+  }
+
+  .register__field {
+    width: calc(100% - 2 * 30px);
+  }
+
+  .register__button-container {
+    width: calc(100% - 2 * 30px);
+  }
+}

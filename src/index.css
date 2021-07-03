@@ -1,0 +1,4 @@
+/* стили основного контента и темы оформления*/
+@import url("./vendor/normalize.css");
+@import url("./vendor/theme.css");
+@import url("./fonts/inter/inter.css");
