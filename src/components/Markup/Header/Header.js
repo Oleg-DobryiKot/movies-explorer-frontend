@@ -3,10 +3,9 @@ import './Header.css';
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
-function Header() {
+function Header({ loggedIn, onLoggedOut, userData }) {
 
   //temporary state for changing header-view depends of login  
-  const [loggedIn, setLoggedIn] = useState(false); 
   const location = useLocation();
   const [logoClass, setLogoClass] = useState("header__logo"); 
 
@@ -14,17 +13,9 @@ function Header() {
     (location.pathname === "/signup" || location.pathname === "/signin") ? setLogoClass("header__logo_hide") : setLogoClass("header__logo")  
    }, [location]);
 
-  function handleLogoClick() {
-    if (!loggedIn) {
-      setLoggedIn(true);
-      return;
-    }
-    setLoggedIn(false);
-  }
-
   return (
     <header className="header">
-      <Link to="/" onClick={ handleLogoClick }>
+      <Link to="/" >
       <img
         className={ logoClass }
         src={ logo }

@@ -8,8 +8,9 @@ function MovieCardList({cardlist, onCardClick, onCardLike, onCardDelete}) {
         <div className="movie-cards__container">       
         {cardlist.map((card) => (
           <MovieCard 
-            key={ card._id }
-            { ...card } 
+            key={ card.id }
+            card={ card }
+            // { ...card } 
             // onCardClick={ onCardClick } 
             // onCardLike={ onCardLike }
             // onCardDelete={ onCardDelete }

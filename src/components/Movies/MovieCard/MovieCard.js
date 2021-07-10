@@ -2,8 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import './MovieCard.css';
 
-function MovieCard({onCardClick, onCardLike, link, name, duration }) {
+const DEFAULT_MOVIES_PATH = 'https://api.nomoreparties.co';
 
+function MovieCard({onCardClick, onCardLike, card }) {
+  const {id, nameRU, nameEN, country, description, director, duration, trailerLink, year, image, } = card;
+  const {url, formats,} = image;
+  const { thumbnailUrl = url } = formats.thumbnail.url;
   const [isLiked, setIsLiked] = useState(false); 
   const location = useLocation();
   const [showDelete, setShowDelete] = useState(false); 
@@ -16,7 +20,7 @@ function MovieCard({onCardClick, onCardLike, link, name, duration }) {
   }, [location]);
     
   function handleClick() {
-    onCardClick({link, name});
+    onCardClick({ url, nameRU });
   }
 
   function handleLikeClick() {
@@ -31,12 +35,12 @@ function MovieCard({onCardClick, onCardLike, link, name, duration }) {
     <div className="movie-card">
       <img 
         className="movie-card__image"
-        src={ link }
-        alt={ name }
+        src={ DEFAULT_MOVIES_PATH+url }
+        alt={ nameRU }
         onClick={ handleClick }
       />
       <div className="movie-card__description">
-        <h3 className="movie-card__title">{ name }</h3>
+        <h3 className="movie-card__title">{ nameRU }</h3>
         {/* todo:
               make one button with different class depended from state
               and owner

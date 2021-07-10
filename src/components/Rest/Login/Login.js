@@ -1,15 +1,20 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import './Login.css';
 import logo from '../../../images/logo/logo.svg';
 
-export default function Login() {
+export default function Login({ onLogin, onShowTooltip }) {
  
-  const initialData = {
-    password: '',
-    email: ''
-  }
+  const initialData = { password: '', email: '' };
   const [data, setData] = useState(initialData);
+  const [message, setMessage] = useState('');
+  const history = useHistory();
+
+  useEffect(() => {
+    if (localStorage.getItem('jwt')) {
+      history.push('/movies');
+    }
+  },[history]);
 
   const handleChange = (event) => {
     const {name, value} = event.target;
@@ -17,6 +22,28 @@ export default function Login() {
       ...data,
       [name]: value,
     }));
+  }
+
+  const resetForm = () => {
+    setData(initialData);
+    setMessage('');
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    
+    if (!data.email || !data.password) {
+      onShowTooltip();
+      return;
+    }
+    
+    onLogin(data)
+      .then(() => {
+        onShowTooltip();
+      })
+      .then(resetForm)
+      .then(() => history.push('/'))
+      .catch(err => setMessage(err.message || 'Что-то пошло не так!'));
   }
 
     return(
@@ -31,19 +58,19 @@ export default function Login() {
           </Link>
           Рады видеть!
         </p>
-        <form className="login__form">
+        <form className="login__form" onSubmit={ handleSubmit } >
           <fieldset className="login__field">
             <label className="login__label">E-mail</label>
-            <input className="login__input" id="email" name="email" type="email" placeholder="Email:" value={data.email} onChange={ handleChange } />
+            <input className="login__input" id="email" required name="email" type="email" placeholder="Email:" value={data.email} onChange={ handleChange } />
             <span className="login__error">Тут должен быть валидный email</span>
           </fieldset>
           <fieldset className="login__field">
             <label className="login__label">Пароль</label>
-            <input className="login__input" id="password" name="password" type="password" placeholder="Пароль:" value={data.password} onChange={ handleChange } />
+            <input className="login__input" id="password" required name="password" type="password" placeholder="Пароль:" value={data.password} onChange={ handleChange } />
             <span className="login__error login__error_visible">Что-то пошло не так</span>
           </fieldset>
           <div className="login__button-container">
-            <button type="submit" className="login__button-submit">Войти</button>
+            <button type="submit" className="login__button-submit" onSubmit={ handleSubmit } >Войти</button>
           </div>
         </form>
 

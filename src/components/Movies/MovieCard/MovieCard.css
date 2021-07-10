@@ -4,8 +4,10 @@
   box-sizing: border-box;
   border-radius: 2px;
   overflow: hidden;
-  max-width: 270px;
   position: relative;
+  max-width: 340px;
+  min-width: 270px;
+  width: inherit;  
 }
 
 .movie-card__image {

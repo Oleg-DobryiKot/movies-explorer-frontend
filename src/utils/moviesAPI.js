@@ -1,9 +1,7 @@
-class Api {
+class MoviesApi {
   constructor(login) {
     this._server = login.server;
-    this._auth = ''; //login.auth;
-    // this._cohort = login.cohort;
-    // this._path = `${this._server}${this._cohort}`;
+    this._path = `${this._server}`;
   }
 
   _handleResponse(request) {
@@ -18,9 +16,6 @@ class Api {
   getInitialMovies() {
     const request = fetch(`${this._path}/beatfilm-movies`, {
       method: 'GET',
-      headers: {
-        authorization: this._auth
-      }
     });
     return this._handleResponse(request);
   }
@@ -28,9 +23,7 @@ class Api {
 
 const login = {
   "server": "https://api.nomoreparties.co",
-  "auth": "ca5f4285-decb-4fbb-b094-52f199996ef3",
-  "cohort": "cohort-19"
 }
 
-const api = new Api(login);
-export default api;
+const moviesApi = new MoviesApi(login);
+export default moviesApi;

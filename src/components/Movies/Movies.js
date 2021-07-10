@@ -2,28 +2,27 @@ import 'react-dom';
 import { useLocation } from 'react-router-dom';
 import React, { useEffect, useState, useMemo } from 'react';
 import Preloader from './Preloader/Preloader';
-import { movieCards, movieSavedCards } from '../../utils/MovieCards';
+// import { movieSavedCards } from '../../utils/MovieCards';
 import ListModel from '../../utils/ListModel';
-import { getMovieCountOnScreen } from '../../utils/utils';
-
+import { getMovieCountOnScreen, getMovieCountMore } from '../../utils/utils';
+import moviesApi from '../../utils/moviesAPI';
+import mainApi from '../../utils/mainApi';
 
 import SearchForm from './SearchForm/SearchForm';
 import MovieCardList from './MoviesCardList/MovieCardList';
 import MovieMore from './MovieMore/MovieMore';
 
-const DEFAULT_MOVIES_LENGTH = 5;
-
-function fetchSimulate(list) {
-  return new Promise(res => {
-    setTimeout(() => {
-      res(list);
-    }, 3000);
-  });
-}
+// function fetchSimulate(list) {
+//   return new Promise(res => {
+//     setTimeout(() => {
+//       res(list);
+//     }, 3000);
+//   });
+// }
 
 function Movies() {
   const moviesListModel = useMemo(
-    () => new ListModel([], DEFAULT_MOVIES_LENGTH),
+    () => new ListModel([], getMovieCountOnScreen()),
     [],
   );
 
@@ -31,6 +30,7 @@ function Movies() {
   const [cardList, setCardList] = useState(moviesListModel.viewList); 
   const [showMore, setShowMore] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const token = '';  
 
   useEffect(() => {
     return moviesListModel.onViewListChange(updatedList => {
@@ -42,22 +42,31 @@ function Movies() {
   useEffect(() => {
     if (location.pathname === "/movies") {
       setIsLoading(true);
-      fetchSimulate(movieCards)
-        .then((cards) => {
-          moviesListModel.updateInitialList(cards);
+      moviesApi.getInitialMovies()
+        .then((movieCards) => {
+          moviesListModel.updateInitialList(movieCards);
         })
         .catch()
         .finally(() => setIsLoading(false));
 
     } else if (location.pathname === "/saved-movies") {
-      moviesListModel.updateInitialList(movieSavedCards);
+        setIsLoading(true);
+        mainApi.getSavedMovies(token)
+          .then((movieSavedCards) => {
+            moviesListModel.updateInitialList(movieSavedCards);
+          })
+          .catch(() => {
+            console.error('Произошла ошибка');
+            moviesListModel.updateInitialList([]);
+          })
+          .finally(() => setIsLoading(false));
     } else {
       moviesListModel.updateInitialList([]);
     }
   }, [location]);
 
   function showMoreMovies() {
-    moviesListModel.showMore(getMovieCountOnScreen());
+    moviesListModel.showMore(getMovieCountMore());
   }  
 
   function onSearch(search) {
@@ -65,7 +74,7 @@ function Movies() {
       moviesListModel.setSearchFn(null);
     } else {
       moviesListModel.setSearchFn(item => {
-        return item.name.toLowerCase().includes(search.toLowerCase());
+        return item.nameRU.toLowerCase().includes(search.toLowerCase());
       });
     }
   }
@@ -75,8 +84,7 @@ function Movies() {
       moviesListModel.setFilterFn(null);
     } else {
       moviesListModel.setFilterFn(item => {
-        // item.duration < 1000
-        return item.duration < 160;
+        return item.duration < 40;
       });
     }
   }
