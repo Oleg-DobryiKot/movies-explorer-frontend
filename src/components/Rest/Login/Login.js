@@ -10,11 +10,11 @@ export default function Login({ onLogin, onShowTooltip }) {
   const [message, setMessage] = useState('');
   const history = useHistory();
 
-  useEffect(() => {
-    if (localStorage.getItem('jwt')) {
-      history.push('/movies');
-    }
-  },[history]);
+  // useEffect(() => {
+  //   if (localStorage.getItem('jwt')) {
+  //     history.push('/movies');
+  //   }
+  // },[history]);
 
   const handleChange = (event) => {
     const {name, value} = event.target;
