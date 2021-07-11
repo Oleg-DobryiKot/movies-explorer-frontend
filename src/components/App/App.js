@@ -22,10 +22,10 @@ import mainApi from '../../utils/mainApi';
 
 function App() {
   const initialData = { email: '', password: ''};
-  const [data, setData] = useState(initialData);
+  // const [data, setData] = useState(initialData);
   const history = useHistory();
 
-  const [currentUserState, setCurrentUserState] = useState({});
+  const [currentUser, setCurrentUser] = useState(null);
   const [loggedIn, setLoggedIn] = useState(false);
   const [isRegistered, setIsRegistered] = useState(false);
 
@@ -37,11 +37,12 @@ function App() {
     getUserDataByToken()
       .then((userData) => {
         if (userData) {
+          debugger;
           const authToken = localStorage.getItem('jwt');
-          setData(userData);
+          setCurrentUser(userData);
           setLoggedIn(true);
           mainApi.getUserInfo(authToken)
-            .then(info => { setCurrentUserState(info) })
+            .then(info => { setCurrentUser(info) })
             .catch(console.error);
           history.push('/movies');
         } else {
@@ -65,24 +66,27 @@ function App() {
             resolve(null);
           });
       } else {
-          resolve(null);  
+        resolve(null);  
       }      
     });
   }
 
   function handleLogin({ email, password }) {
+    debugger;
     return auth.authorize(email, password)
       .then(res => {
         if (!res || res.status === 400) throw new Error('Что то пошло не так!')
         if (res.status === 401) throw new Error('Нет пользователя с таким e-mail...');
         if (res.token) {
           localStorage.setItem('jwt', res.token);
-          setData({ email, password });
+          setCurrentUser({ email, password });
           setLoggedIn(true);
           mainApi.getUserInfo(res.token)
-          .then(info => { setCurrentUserState(info) })
-          .catch(console.error);
-          history.push('/movies');
+            .then(info => {
+              setCurrentUser(info);
+              history.push('/movies');
+            })
+            .catch(console.error);
         }
       });
   }
@@ -112,7 +116,7 @@ function App() {
 
   function handleLoggedOut() {
     localStorage.removeItem('jwt');
-    setData(initialData);
+    setCurrentUser(initialData);
     setLoggedIn(false);    
     history.push('/');
   }
@@ -127,9 +131,9 @@ function App() {
 
   return (
     <div className="page">
-      <CurrentUserContext.Provider value={{ currentUser: currentUserState, setCurrentUser: currentUser => setCurrentUserState(currentUser) }}>       
+      <CurrentUserContext.Provider value={{ currentUser: currentUser, setCurrentUser: setCurrentUser }}>       
       <TooltipContext.Provider value={{ message: tooltipMessage, setMessage: setTooltipMessage }}>
-
+      <div>{ JSON.stringify(currentUser) }</div> 
       <Header loggedIn={ loggedIn } /> 
         <Switch>
           <Route exact path="/"> 
@@ -138,7 +142,6 @@ function App() {
           <ProtectedRoute path="/profile" 
             loggedIn={ loggedIn }
             onLoggedOut={ handleLoggedOut } 
-            userData={ data }
             component={ Profile }
           />
           <ProtectedRoute path="/movies"
