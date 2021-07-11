@@ -6,7 +6,7 @@ import 'react-dom';
 import { ErrorMessageContext } from '../../../contexts/ErrorMessageContext';
 
 function Tooltip({ isOpen, onClose, isRegistered, isLoggedIn }) {
-  const { message } = useContext(ErrorMessageContext);
+  const { message, setErrorMessage } = useContext(ErrorMessageContext);
 
   const TooltipMessage = (isRegistered || isLoggedIn) ? 'Все прошло успешно!' : (message || 'Что-то пошло не так!');
   const TooltipLogo = (isRegistered || isLoggedIn) ? logoResolve : logoReject;

@@ -7,7 +7,7 @@ import EditProfilePopup from '../../Markup/Popups/EditProfilePopup/EditProfilePo
 import mainApi from '../../../utils/mainApi';
 
 export default function Profile({onLoggedOut, userData}) {
-  const [currentUser, setCurentUser] = useState({}); /*useContext(CurrentUserContext);*/
+  const userContext = useContext(CurrentUserContext);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
 
   // console.log(currentUser);
@@ -21,10 +21,14 @@ export default function Profile({onLoggedOut, userData}) {
     setIsEditProfilePopupOpen(false);
   }
 
-  function handleUpdateUser(UserData) {
+  function handleUpdateUser(userData) {
+    debugger;
     const authToken = localStorage.getItem('jwt');
-    mainApi.sendUserInfo(UserData, authToken)
-      .then(setCurentUser(UserData))
+    mainApi.sendUserInfo(userData, authToken)
+      .then((user) => {
+        debugger;
+        userContext.setCurrentUser(user)
+      })
       .catch(console.error);
     setIsEditProfilePopupOpen(false);
   }
@@ -32,16 +36,16 @@ export default function Profile({onLoggedOut, userData}) {
   return(
     <div className="profile">
       <p className="profile__welcome">
-          Привет! { currentUser.name }
+          Привет! { userContext.currentUser.name }
       </p>
       <div className="profile__account">
         <div className="profile__account-field">
           <p className="profile__account-field_name">Имя</p>
-          <p className="profile__account-field_data">{ currentUser.name }</p>
+          <p className="profile__account-field_data">{ userContext.currentUser.name }</p>
         </div>
         <div className="profile__account-field">
           <p className="profile__account-field_name">Email</p>
-          <p className="profile__account-field_data">{ currentUser.email }</p>
+          <p className="profile__account-field_data">{ userContext.currentUser.email }</p>
         </div>
         <p className="profile__edit" onClick={ handleEditProfileClick }> Редактировать </p>  
         <p className="profile__logout" onClick={ onLoggedOut }> Выйти из аккаунта</p>      

@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { ErrorMessageContext } from '../../../contexts/ErrorMessageContext';
 import { Link, useHistory } from 'react-router-dom';
 import logo from '../../../images/logo/logo.svg';
 import './Register.css';
+import { TooltipContext } from '../../../contexts/TooltipContext';
 
-export default function Register({ onRegister, onShowTooltip }) {
+export default function Register({ onRegister }) {
   const initialData = {
     password: '',
     email: '',
@@ -12,14 +12,14 @@ export default function Register({ onRegister, onShowTooltip }) {
   };
 
   const [data, setData] = useState(initialData);
-  const { message, setErrorMessage } = useContext(ErrorMessageContext);
+  const { setMessage } = useContext(TooltipContext);
   const history = useHistory();
   
-  useEffect(() => {
-    if (localStorage.getItem('jwt')) {
-      history.push('/movies');
-    }
-  },[history]);
+  // useEffect(() => {
+  //   if (localStorage.getItem('jwt')) {
+  //     history.push('/movies');
+  //   }
+  // },[]);
 
   const handleChange = (event) => {
     const {name, value} = event.target;
@@ -29,25 +29,33 @@ export default function Register({ onRegister, onShowTooltip }) {
     }));
   }
 
-  const resetForm = () => {
-    setData(initialData);
-    setErrorMessage('');
-  }
+  const resetForm = () => setData(initialData);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (!data.name || !data.email || !data.password) {
-        onShowTooltip();
-        return;
-      }
+    if (!data.name) {
+      setMessage({ type: 'error', text: 'Не введено имя!' });
+      return;
+    }
+    if (!data.email) {
+      setMessage({ type: 'error', text: 'Не введен email!' });
+      return;
+    }
+    if (!data.password) {
+      setMessage({ type: 'error', text: 'Не введен пароль!' });
+      return;
+    }
 
     onRegister(data)
       .then(() => {
-        onShowTooltip()
+        setMessage({ type: 'info', text: 'Вы успешно зарегестрировались!' });
+        resetForm();
+        history.push('/movies');
       })
-      .then(resetForm)
-      .then(() => history.push('/signin'))
-      .catch(err => setErrorMessage(err.message || 'Что-то пошло не так!'));
+      .catch(err => setMessage({
+        type: 'error',
+        text: err.message || 'Что-то пошло не так!'
+      }));
   }
 
   return (
@@ -72,7 +80,7 @@ export default function Register({ onRegister, onShowTooltip }) {
         <fieldset className="register__field">
           <label className="register__label">E-mail</label>
           <input className="register__input" required id="email" name="email" type="email" placeholder="Email:" value={data.email} onChange={ handleChange } />
-          <span className="register__error register__error_visible">Тут должен быть валидный email</span>
+          <span className="register__error">Тут должен быть валидный email</span>
         </fieldset>
         <fieldset className="register__field">
           <label className="register__label">Пароль</label>

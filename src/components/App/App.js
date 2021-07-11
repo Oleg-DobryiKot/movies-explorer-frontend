@@ -6,14 +6,15 @@ import './App.css';
 import Header from '../Markup/Header/Header';
 import Main from '../Markup/Main/Main';
 import Footer from '../Markup/Footer/Footer';
-import Tooltip from '../Markup/Tooltip/Tooltip';
+// import Tooltip from '../Markup/Tooltip/Tooltip';
+import Tooltip2 from '../Markup/Tooltip2/Tooltip2';
 import NotFoundError from '../NotFoundError/NotFoundError';
 import Register from '../Rest/Register/Register';
 import Login from '../Rest/Login/Login';
 import Profile from '../Rest/Profile/Profile';
 import Movies from '../Movies/Movies';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
-import { ErrorMessageContext } from '../../contexts/ErrorMessageContext';
+import { TooltipContext } from '../../contexts/TooltipContext';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import * as auth from '../../utils/auth';
 import mainApi from '../../utils/mainApi';
@@ -27,8 +28,10 @@ function App() {
   const [currentUserState, setCurrentUserState] = useState({});
   const [loggedIn, setLoggedIn] = useState(false);
   const [isRegistered, setIsRegistered] = useState(false);
-  const [errorMessageState, setErrorMessageState]  = useState('');
-  const [isTooltipOpen, setIsTooltipOpen] = useState(false);
+
+  const [tooltipMessage, setTooltipMessage] = useState(null);
+
+  
   
   useEffect(() => {
     getUserDataByToken()
@@ -40,7 +43,10 @@ function App() {
           mainApi.getUserInfo(authToken)
             .then(info => { setCurrentUserState(info) })
             .catch(console.error);
-        } else { history.push('/') } 
+          history.push('/movies');
+        } else {
+          history.push('/');
+        } 
       })
   }, [history, loggedIn]);
 
@@ -76,6 +82,7 @@ function App() {
           mainApi.getUserInfo(res.token)
           .then(info => { setCurrentUserState(info) })
           .catch(console.error);
+          history.push('/movies');
         }
       });
   }
@@ -90,14 +97,15 @@ function App() {
       })
       .then(data => {
         setIsRegistered(true);
+        handleLogin({ email, password });
         return data;
       })
       .catch((res) => {
         setIsRegistered(false);
         if (res.status === 401) {
-          setErrorMessageState('Такой пользователь уже зарегестрирован!')
+          // setErrorMessageState('Такой пользователь уже зарегестрирован!')
         } else {
-          setErrorMessageState('Что-то не так с запросом на сервер!');
+          // setErrorMessageState('Что-то не так с запросом на сервер!');
         }
       })
   }
@@ -109,18 +117,19 @@ function App() {
     history.push('/');
   }
 
-  function handleShowTooltip() {
-    setIsTooltipOpen(true);
-  }
+  // function handleShowTooltip() {
+  //   setIsTooltipOpen(true);
+  // }
 
-  function closeTooltip() {
-    setIsTooltipOpen(false);
-  }
+  // function closeTooltip() {
+  //   setIsTooltipOpen(false);
+  // }
 
   return (
     <div className="page">
       <CurrentUserContext.Provider value={{ currentUser: currentUserState, setCurrentUser: currentUser => setCurrentUserState(currentUser) }}>       
-      <ErrorMessageContext.Provider value={{ message: errorMessageState, setErrorMessage: message => setErrorMessageState(message) }}> 
+      <TooltipContext.Provider value={{ message: tooltipMessage, setMessage: setTooltipMessage }}>
+
       <Header loggedIn={ loggedIn } /> 
         <Switch>
           <Route exact path="/"> 
@@ -141,23 +150,26 @@ function App() {
             component={ Movies }
           />
           <Route path="/signup">
-            <Register onRegister={ handleRegister } onShowTooltip={ handleShowTooltip }/>
+            <Register onRegister={ handleRegister }/>
           </Route>
           <Route path="/signin">
-            <Login onLogin={ handleLogin } onShowTooltip={ handleShowTooltip }/>
+            <Login onLogin={ handleLogin }/>
           </Route>
           <Route path="/error">
             <NotFoundError/>
           </Route>
         </Switch> 
       <Footer/>
+      {/*
       <Tooltip 
         isOpen={ isTooltipOpen }
         onClose={ closeTooltip }
         isRegistered = { isRegistered }
         isLoggedIn = { loggedIn }
       />
-      </ErrorMessageContext.Provider>
+      */}
+      <Tooltip2></Tooltip2>
+      </TooltipContext.Provider>
       </CurrentUserContext.Provider>
     </div>
   );

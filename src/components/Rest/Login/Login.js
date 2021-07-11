@@ -1,20 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import './Login.css';
 import logo from '../../../images/logo/logo.svg';
+import { TooltipContext } from '../../../contexts/TooltipContext';
 
-export default function Login({ onLogin, onShowTooltip }) {
+export default function Login({ onLogin }) {
  
   const initialData = { password: '', email: '' };
   const [data, setData] = useState(initialData);
-  const [message, setMessage] = useState('');
+  const { setMessage } = useContext(TooltipContext);
   const history = useHistory();
-
-  // useEffect(() => {
-  //   if (localStorage.getItem('jwt')) {
-  //     history.push('/movies');
-  //   }
-  // },[history]);
 
   const handleChange = (event) => {
     const {name, value} = event.target;
@@ -26,24 +21,30 @@ export default function Login({ onLogin, onShowTooltip }) {
 
   const resetForm = () => {
     setData(initialData);
-    setMessage('');
   }
 
   const handleSubmit = (event) => {
     event.preventDefault();
     
-    if (!data.email || !data.password) {
-      onShowTooltip();
+    if (!data.email) {
+      setMessage({ type: 'error', text: 'Не введен email!' });
+      return;
+    }
+    if (!data.password) {
+      setMessage({ type: 'error', text: 'Не введен пароль!' });
       return;
     }
     
     onLogin(data)
       .then(() => {
-        onShowTooltip();
+        setMessage({ type: 'info', text: 'Поздравляем, логин успешный!' });
+        resetForm();
+        history.push('/movies');
       })
-      .then(resetForm)
-      .then(() => history.push('/'))
-      .catch(err => setMessage(err.message || 'Что-то пошло не так!'));
+      .catch(err => setMessage({
+        type: 'error',
+        text: err.message || 'Что-то пошло не так!'
+      }));
   }
 
     return(
@@ -67,7 +68,7 @@ export default function Login({ onLogin, onShowTooltip }) {
           <fieldset className="login__field">
             <label className="login__label">Пароль</label>
             <input className="login__input" id="password" required name="password" type="password" placeholder="Пароль:" value={data.password} onChange={ handleChange } />
-            <span className="login__error login__error_visible">Что-то пошло не так</span>
+            <span className="login__error">Что-то пошло не так</span>
           </fieldset>
           <div className="login__button-container">
             <button type="submit" className="login__button-submit" onSubmit={ handleSubmit } >Войти</button>

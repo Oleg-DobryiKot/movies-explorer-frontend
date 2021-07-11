@@ -3,9 +3,8 @@ import './Header.css';
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
-function Header({ loggedIn, onLoggedOut, userData }) {
+function Header({ loggedIn }) {
 
-  //temporary state for changing header-view depends of login  
   const location = useLocation();
   const [logoClass, setLogoClass] = useState("header__logo"); 
 
