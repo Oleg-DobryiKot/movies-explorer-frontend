@@ -20,11 +20,11 @@ import mainApi from '../../utils/mainApi';
 
 
 function App() {
-  const initialData = {email: '', password: ''};
+  const initialData = { email: '', password: ''};
   const [data, setData] = useState(initialData);
   const history = useHistory();
 
-  const [currentUser, setCurrentUser] = useState({});
+  const [currentUserState, setCurrentUserState] = useState({});
   const [loggedIn, setLoggedIn] = useState(false);
   const [isRegistered, setIsRegistered] = useState(false);
   const [errorMessageState, setErrorMessageState]  = useState('');
@@ -38,11 +38,11 @@ function App() {
           setData(userData);
           setLoggedIn(true);
           mainApi.getUserInfo(authToken)
-            .then(info => { setCurrentUser(info) })
+            .then(info => { setCurrentUserState(info) })
             .catch(console.error);
         } else { history.push('/') } 
       })
-  }, [loggedIn]);
+  }, [history, loggedIn]);
 
   const getUserDataByToken = () => {
     return new Promise((resolve) => {
@@ -51,7 +51,7 @@ function App() {
         auth.checkToken(jwt)
           .then(res => {
             if (res) {
-              resolve({ email: res.email });
+              resolve({ email: res.email, name: res.name });
             }
             resolve(null);
           })
@@ -61,7 +61,7 @@ function App() {
       } else {
           resolve(null);  
       }      
-    }) 
+    });
   }
 
   function handleLogin({ email, password }) {
@@ -73,6 +73,9 @@ function App() {
           localStorage.setItem('jwt', res.token);
           setData({ email, password });
           setLoggedIn(true);
+          mainApi.getUserInfo(res.token)
+          .then(info => { setCurrentUserState(info) })
+          .catch(console.error);
         }
       });
   }
@@ -116,15 +119,17 @@ function App() {
 
   return (
     <div className="page">
-      <CurrentUserContext.Provider value={ currentUser }>       
+      <CurrentUserContext.Provider value={{ currentUser: currentUserState, setCurrentUser: currentUser => setCurrentUserState(currentUser) }}>       
       <ErrorMessageContext.Provider value={{ message: errorMessageState, setErrorMessage: message => setErrorMessageState(message) }}> 
-      <Header loggedIn={ loggedIn } onLoggedOut={ handleLoggedOut } userData={ data }/> 
+      <Header loggedIn={ loggedIn } /> 
         <Switch>
           <Route exact path="/"> 
             <Main/>
           </Route>
           <ProtectedRoute path="/profile" 
             loggedIn={ loggedIn }
+            onLoggedOut={ handleLoggedOut } 
+            userData={ data }
             component={ Profile }
           />
           <ProtectedRoute path="/movies"

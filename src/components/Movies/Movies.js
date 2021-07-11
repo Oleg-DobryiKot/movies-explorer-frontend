@@ -35,25 +35,38 @@ function Movies() {
   useEffect(() => {
     return moviesListModel.onViewListChange(updatedList => {
       setCardList(updatedList);
-      setShowMore(moviesListModel.canShowMore);
+      setShowMore(moviesListModel.canShowMore);      
     });
   }, []);
 
   useEffect(() => {
     if (location.pathname === "/movies") {
       setIsLoading(true);
+      // const beatfilms = JSON.parse(localStorage.getItem('beatfilms'));
+      // if (beatfilms.length > 0) {
+      //   console.log(beatfilms);
+      //   moviesListModel.updateInitialList(beatfilms);
+      // }
       moviesApi.getInitialMovies()
         .then((movieCards) => {
           moviesListModel.updateInitialList(movieCards);
+          // debugger;
+          // console.log(movieCards);
+          // localStorage.setItem('beatfilms', JSON.stringify(movieCards));
         })
         .catch()
         .finally(() => setIsLoading(false));
 
     } else if (location.pathname === "/saved-movies") {
         setIsLoading(true);
+        // const myfilms = localStorage.getItem('myfilms');
+        // if (myfilms) {
+        //   moviesListModel.updateInitialList(myfilms);
+        // }
         mainApi.getSavedMovies(token)
           .then((movieSavedCards) => {
             moviesListModel.updateInitialList(movieSavedCards);
+            // localStorage.setItem('myfilms', movieSavedCards);
           })
           .catch(() => {
             console.error('Произошла ошибка');

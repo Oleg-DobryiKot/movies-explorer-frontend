@@ -1,30 +1,55 @@
 import React from 'react';
+import { useState, useEffect, useContext } from 'react';
+import 'react-dom';
+import { CurrentUserContext } from '../../../contexts/CurrentUserContext';
 import './Profile.css';
+import EditProfilePopup from '../../Markup/Popups/EditProfilePopup/EditProfilePopup';
+import mainApi from '../../../utils/mainApi';
 
-export default function Profile() {
- 
-  const userData = {
-    name: 'Олег Матвеев',
-    email: 'ip-soft@yandex.ru'
+export default function Profile({onLoggedOut, userData}) {
+  const [currentUser, setCurentUser] = useState({}); /*useContext(CurrentUserContext);*/
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
+
+  // console.log(currentUser);
+  // debugger;
+
+  function handleEditProfileClick() {
+    setIsEditProfilePopupOpen(true);
+  }
+
+  function closeEditProfilePopup() {
+    setIsEditProfilePopupOpen(false);
+  }
+
+  function handleUpdateUser(UserData) {
+    const authToken = localStorage.getItem('jwt');
+    mainApi.sendUserInfo(UserData, authToken)
+      .then(setCurentUser(UserData))
+      .catch(console.error);
+    setIsEditProfilePopupOpen(false);
   }
 
   return(
     <div className="profile">
       <p className="profile__welcome">
-          Привет! {userData.name}
+          Привет! { currentUser.name }
       </p>
       <div className="profile__account">
         <div className="profile__account-field">
           <p className="profile__account-field_name">Имя</p>
-          <p className="profile__account-field_data">{ userData.name }</p>
+          <p className="profile__account-field_data">{ currentUser.name }</p>
         </div>
         <div className="profile__account-field">
           <p className="profile__account-field_name">Email</p>
-          <p className="profile__account-field_data">{ userData.email }</p>
+          <p className="profile__account-field_data">{ currentUser.email }</p>
         </div>
-        <p className="profile__edit"> Редактировать </p>  
-        <p className="profile__logout"> Выйти из аккаунта</p>      
+        <p className="profile__edit" onClick={ handleEditProfileClick }> Редактировать </p>  
+        <p className="profile__logout" onClick={ onLoggedOut }> Выйти из аккаунта</p>      
       </div>
+      <EditProfilePopup isOpen={ isEditProfilePopupOpen }
+        onClose={ closeEditProfilePopup }
+        onUpdateUser={ handleUpdateUser } 
+      />
     </div>
     )
 }
