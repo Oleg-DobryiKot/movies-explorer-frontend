@@ -21,3 +21,9 @@ function getCountDependsOnScreenResolution(
   }
   return defaultCount; 
 }
+
+export function getFormatedTimeFromMins(minuts) {
+  const hours = Math.trunc(minuts/60);
+  const minutes = minuts % 60;
+  return hours + 'ч  ' + minutes + 'м';
+};

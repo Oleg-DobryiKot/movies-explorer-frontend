@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import './MovieCard.css';
+import { getFormatedTimeFromMins } from '../../../utils/utils';
 
 const DEFAULT_MOVIES_PATH = 'https://api.nomoreparties.co';
 
@@ -61,7 +62,7 @@ function MovieCard({onCardClick, onCardLike, card }) {
           </button>
         }
       </div>
-      <div className="movie-card__duration">{ duration }</div>
+      <div className="movie-card__duration">{ getFormatedTimeFromMins(duration) }</div>
     </div>
   )
 }
