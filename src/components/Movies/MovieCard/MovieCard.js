@@ -32,6 +32,10 @@ function MovieCard({onCardClick, onCardAddLike, onCardDeleteDislike, card, isSav
   //   }
   //   setIsLiked(false);
   // }
+  
+  function handleDeleteClick() {
+    onCardDeleteDislike(card._id);
+  }
 
   return (
     <div className="movie-card">
@@ -59,7 +63,7 @@ function MovieCard({onCardClick, onCardAddLike, onCardDeleteDislike, card, isSav
           <button  
             type="button" 
             className="movie-card__delete-btn"
-            onClick={ onCardDeleteDislike }
+            onClick={ handleDeleteClick }
           >
           </button>
         }
