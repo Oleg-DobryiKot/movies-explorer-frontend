@@ -21,6 +21,7 @@ function Movies() {
   const [cardList, setCardList] = useState(moviesListModel.viewList); 
   const [showMore, setShowMore] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
   const token = '';
 
   useEffect(() => {
@@ -33,6 +34,7 @@ function Movies() {
   useEffect(() => {
     if (location.pathname === "/movies") {
       setIsLoading(true);
+      setIsSaved(false);
       const beatfilms = JSON.parse(localStorage.getItem('beatfilms'));
       if (beatfilms) {
         // debugger;
@@ -51,6 +53,7 @@ function Movies() {
 
     } else if (location.pathname === "/saved-movies") {
         setIsLoading(true);
+        setIsSaved(true);
         const authToken = localStorage.getItem('jwt');
         const myfilms = JSON.parse(localStorage.getItem('myfilms'));
         if (myfilms) {
@@ -127,6 +130,7 @@ function Movies() {
       {isLoading && <Preloader />}
       <MovieCardList 
         cardlist={ cardList }
+        isSaved={ isSaved }
         onCardAddLike={ handleCardAddLike }
         onCardDeleteDislike={ handleCardDeleteDislike }
       />

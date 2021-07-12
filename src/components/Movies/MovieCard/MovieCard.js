@@ -5,10 +5,11 @@ import { getFormatedTimeFromMins } from '../../../utils/utils';
 
 const DEFAULT_MOVIES_PATH = 'https://api.nomoreparties.co';
 
-function MovieCard({onCardClick, onCardAddLike, onCardDeleteDislike, card }) {
-  const {id, nameRU, nameEN, country, description, director, duration, trailerLink, year, image, } = card;
-  const {url, formats,} = image;
-  const { thumbnailUrl = url } = formats.thumbnail.url;
+function MovieCard({onCardClick, onCardAddLike, onCardDeleteDislike, card, isSaved }) {
+    // const {id, nameRU, nameEN, country, description, director, duration, trailerLink, year, image, } = card;
+    // const {url, formats,} = image;
+    // const { thumbnailUrl = url } = formats.thumbnail.url;
+  const PATH_IMG = !isSaved ? DEFAULT_MOVIES_PATH+card.image.url : card.image;
   const [isLiked, setIsLiked] = useState(false); 
   const location = useLocation();
   const [showDelete, setShowDelete] = useState(false); 
@@ -20,28 +21,28 @@ function MovieCard({onCardClick, onCardAddLike, onCardDeleteDislike, card }) {
     (location.pathname === "/movies") ? setShowDelete(false) : setShowDelete(true);
   }, [location]);
     
-  function handleClick() {
-    onCardClick({ url, nameRU });
-  }
+  // function handleClick() {
+  //   onCardClick({ url, nameRU });
+  // }
 
-  function handleLikeClick() {
-    if (!isLiked) {
-      setIsLiked(true);
-      return;
-    }
-    setIsLiked(false);
-  }
+  // function handleLikeClick() {
+  //   if (!isLiked) {
+  //     setIsLiked(true);
+  //     return;
+  //   }
+  //   setIsLiked(false);
+  // }
 
   return (
     <div className="movie-card">
       <img 
         className="movie-card__image"
-        src={ DEFAULT_MOVIES_PATH+url }
-        alt={ nameRU }
-        onClick={ handleClick }
+        src={ PATH_IMG }
+        alt={ card.nameRU }
+        // onClick={ handleClick }
       />
       <div className="movie-card__description">
-        <h3 className="movie-card__title">{ nameRU }</h3>
+        <h3 className="movie-card__title">{ card.nameRU }</h3>
         {/* todo:
               make one button with different class depended from state
               and owner
@@ -63,7 +64,7 @@ function MovieCard({onCardClick, onCardAddLike, onCardDeleteDislike, card }) {
           </button>
         }
       </div>
-      <div className="movie-card__duration">{ getFormatedTimeFromMins(duration) }</div>
+      <div className="movie-card__duration">{ getFormatedTimeFromMins(card.duration) }</div>
     </div>
   )
 }
