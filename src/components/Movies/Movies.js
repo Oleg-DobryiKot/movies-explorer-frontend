@@ -125,7 +125,11 @@ function Movies() {
         onShortFilmsChecked={ onShortFilmsChecked }
       />
       {isLoading && <Preloader />}
-      <MovieCardList cardlist={ cardList, handleCardAddLike, handleCardDeleteDislike }/>
+      <MovieCardList 
+        cardlist={ cardList }
+        onCardAddLike={ handleCardAddLike }
+        onCardDeleteDislike={ handleCardDeleteDislike }
+      />
       { showMore && <MovieMore onShowMore={ showMoreMovies } /> }
     </section>
   )
