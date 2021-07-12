@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import './SearchForm.css';
 
-function SearchForm({onSearch, onShortFilmsChecked}) {
+function SearchForm({ onSearch, onShortFilmsChecked }) {
   const searchRef = useRef(null);
 
   function onSearchSubmit(event) {
@@ -28,7 +28,7 @@ function SearchForm({onSearch, onShortFilmsChecked}) {
         </fieldset>
         <fieldset className="search__field">
           <label className="search__checkbox">
-	          <input type="checkbox" defaultUnchecked onChange={ e => onShortFilmsChecked(e.target.checked) } />
+	          <input type="checkbox" onChange={ e => onShortFilmsChecked(e.target.checked) } />
 	          <span className="search__checkbox-switch"></span>
           </label>
           <span className="search_chk-text">Короткометражки</span>

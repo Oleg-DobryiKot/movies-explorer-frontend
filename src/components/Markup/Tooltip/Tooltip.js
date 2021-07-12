@@ -3,31 +3,47 @@ import logoReject from '../../../images/logo/logo-rej.svg';
 import './Tooltip.css';
 import React, { useContext } from 'react';
 import 'react-dom';
-import { ErrorMessageContext } from '../../../contexts/ErrorMessageContext';
+import { TooltipContext } from '../../../contexts/TooltipContext';
 
-function Tooltip({ isOpen, onClose, isRegistered, isLoggedIn }) {
-  const { message, setErrorMessage } = useContext(ErrorMessageContext);
+function getTooltipLogo(message) {
+  if (!message) {
+    return null;
+  }
+  if (message.type === 'info') {
+    return logoResolve;
+  }
+  if (message.type === 'error') {
+    return logoReject;
+  }
+  return null;
+}
 
-  const TooltipMessage = (isRegistered || isLoggedIn) ? 'Все прошло успешно!' : (message || 'Что-то пошло не так!');
-  const TooltipLogo = (isRegistered || isLoggedIn) ? logoResolve : logoReject;
+function Tooltip() {
+  const { message, setMessage } = useContext(TooltipContext);
 
-  if (isOpen) {
-    setTimeout(() => onClose(), 2000);
+  if (message) {
+    setTimeout(() => setMessage(null), 3000);
   }
 
-  return (
-    <section className={ `tooltip ${ isOpen ? 'tooltip_is-open' : '' }` }>
+  const tooltipLogo = getTooltipLogo(message);
+
+  return message ? (
+    <section className={ 'tooltip' }>
       <div className="tooltip__container">
-        <button onClick={ onClose } type="button" className="tooltip__close"></button>
-          <img
-            className="tooltip__icon"
-            src={ TooltipLogo }
-            alt="Успешный логин"
-          /> 
-        <h3 className="tooltip__title">{ TooltipMessage }</h3> 
+        <button onClick={ () => setMessage(null) } type="button" className="tooltip__close"></button>
+        {
+          tooltipLogo
+            ? <img
+              className="tooltip__icon"
+              src={ tooltipLogo }
+              alt="Успешный логин"
+            />
+            : null
+        }
+        <h3 className="tooltip__title">{ message.text }</h3> 
       </div>
     </section>
-  )
+  ) : null;
 }
 
 export default Tooltip;

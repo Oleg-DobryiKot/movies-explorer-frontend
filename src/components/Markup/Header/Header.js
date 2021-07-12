@@ -24,8 +24,8 @@ function Header({ loggedIn }) {
       {loggedIn &&
         <nav className="header__mobinav header__navbar header__navbar_sp-between">
           <input className="header__mobinav_check" type="checkbox" id="showmenu"/>
-          <label className="header__mobinav_showmenu" for="showmenu">&#9776;</label>
-          <label className="header__mobinav_back" for="showmenu"></label>
+          <label className="header__mobinav_showmenu" htmlFor="showmenu">&#9776;</label>
+          <label className="header__mobinav_back" htmlFor="showmenu"></label>
           <ul className="header__menu header__navbar-movies">
             <li className="header__navbar-links header__navbar-links_active"><Link to="/" className="header__menu_item header__navbar-link">Главная</Link></li>
             <li className="header__navbar-links"><Link to="/movies" className="header__menu_item header__navbar-link">Фильмы</Link></li>

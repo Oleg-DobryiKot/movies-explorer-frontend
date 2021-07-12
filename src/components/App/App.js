@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import 'react-dom';
 
@@ -6,8 +6,7 @@ import './App.css';
 import Header from '../Markup/Header/Header';
 import Main from '../Markup/Main/Main';
 import Footer from '../Markup/Footer/Footer';
-// import Tooltip from '../Markup/Tooltip/Tooltip';
-import Tooltip2 from '../Markup/Tooltip2/Tooltip2';
+import Tooltip from '../Markup/Tooltip/Tooltip';
 import NotFoundError from '../NotFoundError/NotFoundError';
 import Register from '../Rest/Register/Register';
 import Login from '../Rest/Login/Login';
@@ -22,7 +21,6 @@ import mainApi from '../../utils/mainApi';
 
 function App() {
   const initialData = { email: '', password: ''};
-  // const [data, setData] = useState(initialData);
   const history = useHistory();
 
   const [currentUser, setCurrentUser] = useState(null);
@@ -37,19 +35,21 @@ function App() {
     getUserDataByToken()
       .then((userData) => {
         if (userData) {
-          debugger;
           const authToken = localStorage.getItem('jwt');
-          setCurrentUser(userData);
-          setLoggedIn(true);
           mainApi.getUserInfo(authToken)
-            .then(info => { setCurrentUser(info) })
-            .catch(console.error);
-          history.push('/movies');
+            .then(info => {
+              setCurrentUser(info);
+              setLoggedIn(true);
+              history.push('/movies');
+            })
+            .catch(err => {
+              console.error(err);
+            });
         } else {
           history.push('/');
         } 
       })
-  }, [history, loggedIn]);
+  }, [loggedIn]);
 
   const getUserDataByToken = () => {
     return new Promise((resolve) => {
@@ -72,18 +72,16 @@ function App() {
   }
 
   function handleLogin({ email, password }) {
-    debugger;
     return auth.authorize(email, password)
       .then(res => {
         if (!res || res.status === 400) throw new Error('Что то пошло не так!')
         if (res.status === 401) throw new Error('Нет пользователя с таким e-mail...');
         if (res.token) {
-          localStorage.setItem('jwt', res.token);
-          setCurrentUser({ email, password });
-          setLoggedIn(true);
           mainApi.getUserInfo(res.token)
             .then(info => {
+              localStorage.setItem('jwt', res.token);
               setCurrentUser(info);
+              setLoggedIn(true);
               history.push('/movies');
             })
             .catch(console.error);
@@ -107,9 +105,9 @@ function App() {
       .catch((res) => {
         setIsRegistered(false);
         if (res.status === 401) {
-          // setErrorMessageState('Такой пользователь уже зарегестрирован!')
+          setTooltipMessage({ type: 'error', text: 'Такой пользователь уже зарегестрирован!' });
         } else {
-          // setErrorMessageState('Что-то не так с запросом на сервер!');
+          setTooltipMessage({ type: 'error', text: 'Что-то не так с запросом на сервер!' });
         }
       })
   }
@@ -121,27 +119,17 @@ function App() {
     history.push('/');
   }
 
-  // function handleShowTooltip() {
-  //   setIsTooltipOpen(true);
-  // }
-
-  // function closeTooltip() {
-  //   setIsTooltipOpen(false);
-  // }
-
   return (
     <div className="page">
-      <CurrentUserContext.Provider value={{ currentUser: currentUser, setCurrentUser: setCurrentUser }}>       
+      <CurrentUserContext.Provider value={{ user: currentUser, setUser: setCurrentUser }}>       
       <TooltipContext.Provider value={{ message: tooltipMessage, setMessage: setTooltipMessage }}>
-      <div>{ JSON.stringify(currentUser) }</div> 
       <Header loggedIn={ loggedIn } /> 
         <Switch>
           <Route exact path="/"> 
             <Main/>
           </Route>
           <ProtectedRoute path="/profile" 
-            loggedIn={ loggedIn }
-            onLoggedOut={ handleLoggedOut } 
+            onloggedOut={ handleLoggedOut }
             component={ Profile }
           />
           <ProtectedRoute path="/movies"
@@ -163,15 +151,7 @@ function App() {
           </Route>
         </Switch> 
       <Footer/>
-      {/*
-      <Tooltip 
-        isOpen={ isTooltipOpen }
-        onClose={ closeTooltip }
-        isRegistered = { isRegistered }
-        isLoggedIn = { loggedIn }
-      />
-      */}
-      <Tooltip2></Tooltip2>
+      <Tooltip/>
       </TooltipContext.Provider>
       </CurrentUserContext.Provider>
     </div>

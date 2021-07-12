@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useContext } from 'react';
 import 'react-dom';
 import { CurrentUserContext } from '../../../contexts/CurrentUserContext';
 import './Profile.css';
@@ -7,12 +7,8 @@ import EditProfilePopup from '../../Markup/Popups/EditProfilePopup/EditProfilePo
 import mainApi from '../../../utils/mainApi';
 
 export default function Profile({ onLoggedOut }) {
-  debugger;
   const { user, setUser } = useContext(CurrentUserContext);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
-
-  // console.log(currentUser);
-  // debugger;
 
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(true);

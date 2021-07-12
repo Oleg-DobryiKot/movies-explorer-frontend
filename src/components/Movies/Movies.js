@@ -1,8 +1,7 @@
 import 'react-dom';
 import { useLocation } from 'react-router-dom';
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useContext } from 'react';
 import Preloader from './Preloader/Preloader';
-// import { movieSavedCards } from '../../utils/MovieCards';
 import ListModel from '../../utils/ListModel';
 import { getMovieCountOnScreen, getMovieCountMore } from '../../utils/utils';
 import moviesApi from '../../utils/moviesAPI';
@@ -11,14 +10,6 @@ import mainApi from '../../utils/mainApi';
 import SearchForm from './SearchForm/SearchForm';
 import MovieCardList from './MoviesCardList/MovieCardList';
 import MovieMore from './MovieMore/MovieMore';
-
-// function fetchSimulate(list) {
-//   return new Promise(res => {
-//     setTimeout(() => {
-//       res(list);
-//     }, 3000);
-//   });
-// }
 
 function Movies() {
   const moviesListModel = useMemo(
@@ -30,7 +21,7 @@ function Movies() {
   const [cardList, setCardList] = useState(moviesListModel.viewList); 
   const [showMore, setShowMore] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const token = '';  
+  const token = '';
 
   useEffect(() => {
     return moviesListModel.onViewListChange(updatedList => {
@@ -42,31 +33,32 @@ function Movies() {
   useEffect(() => {
     if (location.pathname === "/movies") {
       setIsLoading(true);
-      // const beatfilms = JSON.parse(localStorage.getItem('beatfilms'));
-      // if (beatfilms.length > 0) {
-      //   console.log(beatfilms);
-      //   moviesListModel.updateInitialList(beatfilms);
-      // }
+      const beatfilms = JSON.parse(localStorage.getItem('beatfilms'));
+      if (beatfilms) {
+        // debugger;
+        // console.log(beatfilms);
+        moviesListModel.updateInitialList(beatfilms);
+      }
       moviesApi.getInitialMovies()
         .then((movieCards) => {
-          moviesListModel.updateInitialList(movieCards);
           // debugger;
+          moviesListModel.updateInitialList(movieCards);
           // console.log(movieCards);
-          // localStorage.setItem('beatfilms', JSON.stringify(movieCards));
+          localStorage.setItem('beatfilms', JSON.stringify(movieCards));
         })
         .catch()
         .finally(() => setIsLoading(false));
 
     } else if (location.pathname === "/saved-movies") {
         setIsLoading(true);
-        // const myfilms = localStorage.getItem('myfilms');
-        // if (myfilms) {
-        //   moviesListModel.updateInitialList(myfilms);
-        // }
+        const myfilms = JSON.parse(localStorage.getItem('myfilms'));
+        if (myfilms) {
+          moviesListModel.updateInitialList(myfilms);
+        }
         mainApi.getSavedMovies(token)
           .then((movieSavedCards) => {
             moviesListModel.updateInitialList(movieSavedCards);
-            // localStorage.setItem('myfilms', movieSavedCards);
+            localStorage.setItem('myfilms', JSON.stringify(movieSavedCards));
           })
           .catch(() => {
             console.error('Произошла ошибка');

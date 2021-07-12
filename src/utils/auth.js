@@ -1,5 +1,5 @@
 export const BASE_URL = 'https://api.matveev-oleg.nomoredomains.club'; 
-// export const BASE_URL = 'http://localhost:3030';
+// export const BASE_URL = 'http://localhost:3003';
 
 const responseCheck = (response) => response.ok ? response.json() : Promise.reject(`Ошибка ${response.status}`);
 

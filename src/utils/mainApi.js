@@ -80,7 +80,7 @@ class MainApi {
 }
 
 const login = {
-  // "server": "http://localhost:3030",
+  // "server": "http://localhost:3003",
   "server": "https://api.matveev-oleg.nomoredomains.club",  
 }
 const mainApi = new MainApi(login);
