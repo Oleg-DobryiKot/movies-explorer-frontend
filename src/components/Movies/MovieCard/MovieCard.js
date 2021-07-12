@@ -34,7 +34,7 @@ function MovieCard({onCardClick, onCardAddLike, onCardDeleteDislike, card, isSav
   // }
   
   function handleDeleteClick() {
-    onCardDeleteDislike(card._id);
+    onCardDeleteDislike(card);
   }
 
   return (
