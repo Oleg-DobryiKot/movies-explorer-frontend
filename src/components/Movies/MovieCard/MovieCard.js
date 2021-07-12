@@ -25,13 +25,15 @@ function MovieCard({onCardClick, onCardAddLike, onCardDeleteDislike, card, isSav
   //   onCardClick({ url, nameRU });
   // }
 
-  // function handleLikeClick() {
-  //   if (!isLiked) {
-  //     setIsLiked(true);
-  //     return;
-  //   }
-  //   setIsLiked(false);
-  // }
+  function handleLikeClick() {   
+    if (!isLiked) {
+      setIsLiked(true);
+      onCardAddLike(card);
+      return;
+    }
+    setIsLiked(false);
+    onCardDeleteDislike(card);
+  }
   
   function handleDeleteClick() {
     onCardDeleteDislike(card);
@@ -55,7 +57,7 @@ function MovieCard({onCardClick, onCardAddLike, onCardDeleteDislike, card, isSav
           <button  
             type="button" 
             className={ cardLikeButtonClassName }
-            onClick={ onCardAddLike }
+            onClick={ handleLikeClick }
           >
           </button>
         }

@@ -10,6 +10,9 @@ import mainApi from '../../utils/mainApi';
 import SearchForm from './SearchForm/SearchForm';
 import MovieCardList from './MoviesCardList/MovieCardList';
 import MovieMore from './MovieMore/MovieMore';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
+
+const API_PATH = 'https://api.nomoreparties.co';
 
 function Movies() {
   const moviesListModel = useMemo(
@@ -22,6 +25,7 @@ function Movies() {
   const [showMore, setShowMore] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
+  const { user } = useContext(CurrentUserContext);
   const token = '';
 
   useEffect(() => {
@@ -61,8 +65,9 @@ function Movies() {
         }
         mainApi.getSavedMovies(authToken)
           .then((movieSavedCards) => {
-            moviesListModel.updateInitialList(movieSavedCards);
-            localStorage.setItem('myfilms', JSON.stringify(movieSavedCards));
+            const ownerMovies = movieSavedCards.filter((fil) => fil.owner === user._id);
+            moviesListModel.updateInitialList(ownerMovies);
+            localStorage.setItem('myfilms', JSON.stringify(ownerMovies));
           })
           .catch(() => {
             console.error('Произошла ошибка');
@@ -99,12 +104,27 @@ function Movies() {
   }
 
   function handleCardAddLike(movie) {
-    // const isLiked = card.likes.some(item => item === currentUser._id);
+    // const myfilms = JSON.parse(localStorage.getItem('myfilms'));
+    // const isLiked = myfilms.some(item => item.movieId === movie.id);  
     const authToken = localStorage.getItem('jwt');
-    mainApi.addMovie(movie, authToken)
+    const myMovieModel = {
+      'country': movie.country,
+      'director': movie.director, 
+      'duration': movie.duration,
+      'year': movie.year,
+      'description': movie.description,
+      'image': API_PATH+movie.image.url,
+      'trailer': movie.trailerLink,
+      'thumbnail': API_PATH+movie.image.formats.thumbnail.url,
+      'movieId': movie.id.toString(),
+      'nameRU': movie.nameRU,
+      'nameEN': movie.nameEN,
+    }
+    mainApi.addMovie(myMovieModel, authToken)
       .then((newMovie) => {
         // const newCards = cards.map(cardItem => cardItem._id === card._id ? newCard : cardItem);
         // setCards(newCards)
+        console.log('film added to our base');
       })
       .catch(console.error);
   } 
