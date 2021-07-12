@@ -52,6 +52,10 @@ export default class ListModel {
     this._updateViewList();
   }
 
+  getFullList() {
+    return this._initialList;
+  }
+
   changeItem(findOldItem, newItem) {
     const oldItemIndex = this._initialList.findIndex(findOldItem);
 

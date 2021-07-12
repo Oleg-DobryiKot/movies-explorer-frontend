@@ -1,19 +1,17 @@
 import MovieCard from '../MovieCard/MovieCard';
 import './MovieCardList.css';
 
-function MovieCardList({cardlist, isSaved, onCardClick, onCardAddLike, onCardDeleteDislike}) {
+function MovieCardList({cardlist, getCardKey, onCardClick, setMovieLike}) {
   
   return (
       <section className="movie-cards">
         <div className="movie-cards__container">       
         {cardlist.map((card) => (
           <MovieCard 
-            key={!isSaved ? card.id : card._id }
+            key={ getCardKey(card) }
             card={ card }
-            isSaved={ isSaved }
             // onCardClick={ onCardClick } 
-            onCardAddLike={ onCardAddLike }
-            onCardDeleteDislike={ onCardDeleteDislike }
+            setMovieLike={ isLiked => setMovieLike(card, isLiked) }
           />
           )
         )}

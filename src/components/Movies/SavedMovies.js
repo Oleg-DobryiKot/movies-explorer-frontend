@@ -1,32 +1,27 @@
 import 'react-dom';
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useContext } from 'react';
 import Preloader from './Preloader/Preloader';
 import ListModel from '../../utils/ListModel';
 import { getMovieCountOnScreen, getMovieCountMore } from '../../utils/utils';
-import { moviesApi, convertMovieToSavedMovie } from '../../utils/moviesAPI';
 import mainApi from '../../utils/mainApi';
-import { getLocalMovies, setLocalMovies } from '../../utils/moviesStorage';
-import { setLikedStatusToMovies, removeLocalSavedMovieById, setLocalSavedMovies, getLocalSavedMovieByMovieId, addLocalSavedMovie } from '../../utils/savedMoviesStorage';
+import { getLocalSavedMovies, removeLocalSavedMovieById, setLocalSavedMovies } from '../../utils/savedMoviesStorage';
+import { dislikeLocalMovie } from '../../utils/moviesStorage';
 
 import SearchForm from './SearchForm/SearchForm';
 import MovieCardList from './MoviesCardList/MovieCardList';
 import MovieMore from './MovieMore/MovieMore';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
-const emptySearchFn = () => false;
-
-function Movies() {
+function SavedMovies() {
   const moviesListModel = useMemo(
-    () => {
-      const listModel = new ListModel([], getMovieCountOnScreen());
-      listModel.setSearchFn(emptySearchFn);
-      return listModel;
-    },
+    () => new ListModel([], getMovieCountOnScreen()),
     [],
   );
 
   const [cardList, setCardList] = useState(moviesListModel.viewList); 
   const [showMore, setShowMore] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const { user } = useContext(CurrentUserContext);
 
   useEffect(() => {
     return moviesListModel.onViewListChange(updatedList => {
@@ -37,22 +32,25 @@ function Movies() {
 
   useEffect(() => {
     setIsLoading(true);
-    moviesListModel.setSearchFn(emptySearchFn);
-    moviesListModel.updateInitialList(getLocalMovies());
     const authToken = localStorage.getItem('jwt');
+    moviesListModel.setSearchFn(null);
+    moviesListModel.updateInitialList(getLocalSavedMovies());
+    mainApi.getSavedMovies(authToken)
+      .then((movieSavedCards) => {
+        const savedMovies = movieSavedCards
+          .filter((savedCard) => savedCard.owner === user._id)
+          .map((savedCard) => ({
+            ...savedCard,
+            canDelete: true,
+          }));
 
-    Promise.all([
-      moviesApi.getInitialMovies(),
-      mainApi.getSavedMovies(authToken),
-    ])
-      .then(([ movies, savedMovies ]) => {
+        moviesListModel.updateInitialList(savedMovies);
         setLocalSavedMovies(savedMovies);
-        const likedMoviesModel = setLikedStatusToMovies(movies);
-        setLocalMovies(likedMoviesModel);
-        
-        moviesListModel.updateInitialList(likedMoviesModel);
       })
-      .catch()
+      .catch(() => {
+        console.error('Произошла ошибка');
+        moviesListModel.updateInitialList([]);
+      })
       .finally(() => setIsLoading(false));
   }, []);
 
@@ -62,7 +60,7 @@ function Movies() {
 
   function onSearch(search) {
     if (!search) {
-      moviesListModel.setSearchFn(emptySearchFn);
+      moviesListModel.setSearchFn(null);
     } else {
       moviesListModel.setSearchFn(item => {
         return item.nameRU.toLowerCase().includes(search.toLowerCase());
@@ -84,41 +82,17 @@ function Movies() {
     const authToken = localStorage.getItem('jwt');
 
     if (isLiked) {
-      const savedMovieModel = convertMovieToSavedMovie(movie);
-
-      mainApi.addMovie(savedMovieModel, authToken)
-        .then((savedMovie) => {
-          addLocalSavedMovie(savedMovie);
-          moviesListModel.changeItem(
-            ({ id }) => id === movie.id,
-            {
-              ...movie,
-              isLiked: true,
-            },
-          );
-          setLocalMovies(moviesListModel.getFullList());
-        })
-        .catch((err) => {
-          console.error(err);
-        });
+      return;
     } else {
-
-      const movieToDelete = getLocalSavedMovieByMovieId(movie.id);
-      mainApi.deleteMovie(movieToDelete._id, authToken)
+      mainApi.deleteMovie(movie._id, authToken)
         .then(() => {
-          removeLocalSavedMovieById(movieToDelete._id);
-          moviesListModel.changeItem(
-            ({ id }) => id === movie.id,
-            {
-              ...movie,
-              isLiked: false,
-            },
-          );
-          setLocalMovies(moviesListModel.getFullList());
+          removeLocalSavedMovieById(movie._id);
+          const updatedMovieList = cardList.filter(({ _id }) => _id !== movie._id);
+          moviesListModel.updateInitialList(updatedMovieList);
+          dislikeLocalMovie(movie.movieId);
         })
         .catch(console.error);
     }
-
   } 
 
   return (
@@ -130,7 +104,7 @@ function Movies() {
       {isLoading && <Preloader />}
       <MovieCardList 
         cardlist={ cardList }
-        getCardKey={ card => card.id.toString() }
+        getCardKey={ card => card._id }
         setMovieLike={ setMovieLike }
       />
       { showMore && <MovieMore onShowMore={ showMoreMovies } /> }
@@ -138,4 +112,4 @@ function Movies() {
   )
 }
   
-export default Movies;
+export default SavedMovies;

@@ -12,6 +12,7 @@ import Register from '../Rest/Register/Register';
 import Login from '../Rest/Login/Login';
 import Profile from '../Rest/Profile/Profile';
 import Movies from '../Movies/Movies';
+import SavedMovies from '../Movies/SavedMovies';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import { TooltipContext } from '../../contexts/TooltipContext';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
@@ -139,7 +140,7 @@ function App() {
           />
           <ProtectedRoute path="/saved-movies"
             loggedIn={ loggedIn }
-            component={ Movies }
+            component={ SavedMovies }
           />
           <Route path="/signup">
             <Register onRegister={ handleRegister }/>

@@ -1,42 +1,29 @@
-import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React from 'react';
 import './MovieCard.css';
 import { getFormatedTimeFromMins } from '../../../utils/utils';
 
 const DEFAULT_MOVIES_PATH = 'https://api.nomoreparties.co';
 
-function MovieCard({onCardClick, onCardAddLike, onCardDeleteDislike, card, isSaved }) {
-    // const {id, nameRU, nameEN, country, description, director, duration, trailerLink, year, image, } = card;
-    // const {url, formats,} = image;
-    // const { thumbnailUrl = url } = formats.thumbnail.url;
-  const PATH_IMG = !isSaved ? DEFAULT_MOVIES_PATH+card.image.url : card.image;
-  const [isLiked, setIsLiked] = useState(false); 
-  const location = useLocation();
-  const [showDelete, setShowDelete] = useState(false); 
-  
-  const cardLikeButtonClassName = (
-    `movie-card__like-icon ${isLiked ? 'movie-card__like-icon_active' : ''}`); 
+function getCardImage(card) {
+  if (card.canDelete) {
+    return card.image;
+  } 
+  return DEFAULT_MOVIES_PATH+card.image.url;
+}
 
-  useEffect(() => {
-    (location.pathname === "/movies") ? setShowDelete(false) : setShowDelete(true);
-  }, [location]);
-    
+function MovieCard({onCardClick, setMovieLike, card }) {
+  const PATH_IMG = getCardImage(card);
+
   // function handleClick() {
   //   onCardClick({ url, nameRU });
   // }
 
-  function handleLikeClick() {   
-    if (!isLiked) {
-      setIsLiked(true);
-      onCardAddLike(card);
-      return;
+  function handleLikeClick() {
+    if (card.canDelete || card.isLiked) {
+      setMovieLike(false);
+    } else {
+      setMovieLike(true);
     }
-    setIsLiked(false);
-    onCardDeleteDislike(card);
-  }
-  
-  function handleDeleteClick() {
-    onCardDeleteDislike(card);
   }
 
   return (
@@ -53,19 +40,19 @@ function MovieCard({onCardClick, onCardAddLike, onCardDeleteDislike, card, isSav
               make one button with different class depended from state
               and owner
          */}
-        {!showDelete &&
+        {!card.canDelete &&
           <button  
             type="button" 
-            className={ cardLikeButtonClassName }
+            className={ `movie-card__like-icon ${card.isLiked ? 'movie-card__like-icon_active' : ''}` }
             onClick={ handleLikeClick }
           >
           </button>
         }
-        {showDelete &&
+        {card.canDelete &&
           <button  
             type="button" 
             className="movie-card__delete-btn"
-            onClick={ handleDeleteClick }
+            onClick={ handleLikeClick }
           >
           </button>
         }
