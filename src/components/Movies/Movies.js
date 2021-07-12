@@ -51,11 +51,12 @@ function Movies() {
 
     } else if (location.pathname === "/saved-movies") {
         setIsLoading(true);
+        const authToken = localStorage.getItem('jwt');
         const myfilms = JSON.parse(localStorage.getItem('myfilms'));
         if (myfilms) {
           moviesListModel.updateInitialList(myfilms);
         }
-        mainApi.getSavedMovies(token)
+        mainApi.getSavedMovies(authToken)
           .then((movieSavedCards) => {
             moviesListModel.updateInitialList(movieSavedCards);
             localStorage.setItem('myfilms', JSON.stringify(movieSavedCards));
@@ -94,6 +95,29 @@ function Movies() {
     }
   }
 
+  function handleCardAddLike(movie) {
+    // const isLiked = card.likes.some(item => item === currentUser._id);
+    const authToken = localStorage.getItem('jwt');
+    mainApi.addMovie(movie, authToken)
+      .then((newMovie) => {
+        // const newCards = cards.map(cardItem => cardItem._id === card._id ? newCard : cardItem);
+        // setCards(newCards)
+      })
+      .catch(console.error);
+  } 
+
+  function handleCardDeleteDislike(movie) {
+    // const isOwner = card.owner === currentUser._id;
+    const authToken = localStorage.getItem('jwt');
+
+    mainApi.deleteMovie(movie._id, authToken)
+      .then(() => {
+        // const newCards = cards.filter(({ _id }) => _id !== card._id);
+        // setCards(newCards)
+      })
+      .catch(console.error);
+  } 
+
   return (
     <section className="movies">
       <SearchForm 
@@ -101,7 +125,7 @@ function Movies() {
         onShortFilmsChecked={ onShortFilmsChecked }
       />
       {isLoading && <Preloader />}
-      <MovieCardList cardlist={ cardList }/>
+      <MovieCardList cardlist={ cardList, handleCardAddLike, handleCardDeleteDislike }/>
       { showMore && <MovieMore onShowMore={ showMoreMovies } /> }
     </section>
   )

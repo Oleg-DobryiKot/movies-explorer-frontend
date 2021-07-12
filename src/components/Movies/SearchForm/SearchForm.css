@@ -153,6 +153,9 @@
     width: calc(100% - 2 * 50px);
     max-width: calc(100% - 2 * 50px);
   }
+  .search__input {
+    margin-right: 10px;
+  }
 }
 
 @media screen and (min-width: 640px) and (max-width: 899px) {

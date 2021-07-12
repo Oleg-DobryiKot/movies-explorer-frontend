@@ -5,7 +5,7 @@ import { getFormatedTimeFromMins } from '../../../utils/utils';
 
 const DEFAULT_MOVIES_PATH = 'https://api.nomoreparties.co';
 
-function MovieCard({onCardClick, onCardLike, card }) {
+function MovieCard({onCardClick, onCardAddLike, onCardDeleteDislike, card }) {
   const {id, nameRU, nameEN, country, description, director, duration, trailerLink, year, image, } = card;
   const {url, formats,} = image;
   const { thumbnailUrl = url } = formats.thumbnail.url;
@@ -50,7 +50,7 @@ function MovieCard({onCardClick, onCardLike, card }) {
           <button  
             type="button" 
             className={ cardLikeButtonClassName }
-            onClick={ handleLikeClick }
+            onClick={ onCardAddLike }
           >
           </button>
         }
@@ -58,6 +58,7 @@ function MovieCard({onCardClick, onCardLike, card }) {
           <button  
             type="button" 
             className="movie-card__delete-btn"
+            onClick={ onCardDeleteDislike }
           >
           </button>
         }

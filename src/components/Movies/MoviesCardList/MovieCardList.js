@@ -1,8 +1,8 @@
 import MovieCard from '../MovieCard/MovieCard';
 import './MovieCardList.css';
 
-function MovieCardList({cardlist, onCardClick, onCardLike, onCardDelete}) {
-
+function MovieCardList({cardlist, onCardClick, onCardAddLike, onCardDeleteDislike}) {
+  
   return (
       <section className="movie-cards">
         <div className="movie-cards__container">       
@@ -10,10 +10,9 @@ function MovieCardList({cardlist, onCardClick, onCardLike, onCardDelete}) {
           <MovieCard 
             key={ card.id }
             card={ card }
-            // { ...card } 
             // onCardClick={ onCardClick } 
-            // onCardLike={ onCardLike }
-            // onCardDelete={ onCardDelete }
+            onCardAddLike={ onCardAddLike }
+            onCardDeleteDislike={ onCardDeleteDislike }
           />
           )
         )}
