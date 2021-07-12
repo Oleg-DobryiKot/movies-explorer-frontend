@@ -129,6 +129,7 @@ function App() {
             <Main/>
           </Route>
           <ProtectedRoute path="/profile" 
+            loggedIn={ loggedIn }
             onLoggedOut={ handleLoggedOut }
             component={ Profile }
           />
