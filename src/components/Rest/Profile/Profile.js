@@ -19,11 +19,9 @@ export default function Profile({ onLoggedOut }) {
   }
 
   function handleUpdateUser(userData) {
-    debugger;
     const authToken = localStorage.getItem('jwt');
     mainApi.sendUserInfo(userData, authToken)
       .then((user) => {
-        debugger;
         setUser(user);
       })
       .catch(console.error);
