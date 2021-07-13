@@ -18,7 +18,7 @@ function SearchForm({ onSearch, onShortFilmsChecked }) {
             id="moviename" 
             name="searchmovie" 
             type="text" 
-            placeholder="Фильм"
+            placeholder="введите поисковый заброс для отображения подходящих фильмов или пробел -- для всех"
             ref={ searchRef }   
              />
           <button 

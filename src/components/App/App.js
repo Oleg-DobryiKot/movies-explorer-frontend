@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router-dom';
 import 'react-dom';
 
 import './App.css';

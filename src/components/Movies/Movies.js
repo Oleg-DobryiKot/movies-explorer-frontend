@@ -1,5 +1,5 @@
 import 'react-dom';
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useContext } from 'react';
 import Preloader from './Preloader/Preloader';
 import ListModel from '../../utils/ListModel';
 import { getMovieCountOnScreen, getMovieCountMore } from '../../utils/utils';
@@ -7,6 +7,7 @@ import { moviesApi, convertMovieToSavedMovie } from '../../utils/moviesAPI';
 import mainApi from '../../utils/mainApi';
 import { getLocalMovies, setLocalMovies } from '../../utils/moviesStorage';
 import { setLikedStatusToMovies, removeLocalSavedMovieById, setLocalSavedMovies, getLocalSavedMovieByMovieId, addLocalSavedMovie } from '../../utils/savedMoviesStorage';
+import { TooltipContext } from '../../contexts/TooltipContext';
 
 import SearchForm from './SearchForm/SearchForm';
 import MovieCardList from './MoviesCardList/MovieCardList';
@@ -27,6 +28,7 @@ function Movies() {
   const [cardList, setCardList] = useState(moviesListModel.viewList); 
   const [showMore, setShowMore] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const { setMessage } = useContext(TooltipContext);
 
   useEffect(() => {
     return moviesListModel.onViewListChange(updatedList => {
@@ -52,7 +54,9 @@ function Movies() {
         
         moviesListModel.updateInitialList(likedMoviesModel);
       })
-      .catch()
+      .catch(() => {
+        setMessage({ type: 'error', text: 'Возможно сервер не отвечает. Попробуйте повторить запрос позже!' });
+      })
       .finally(() => setIsLoading(false));
   }, []);
 
@@ -62,11 +66,15 @@ function Movies() {
 
   function onSearch(search) {
     if (!search) {
+      setMessage({ type: 'error', text: 'Необходимо ввести поисковый запрос!' });
       moviesListModel.setSearchFn(emptySearchFn);
     } else {
-      moviesListModel.setSearchFn(item => {
+      moviesListModel.setSearchFn(item => { 
         return item.nameRU.toLowerCase().includes(search.toLowerCase());
       });
+      if (!moviesListModel.viewList.length) {
+        setMessage({ type: 'info', text: 'Нет соответсвий данному запросу!' });
+      }
     }
   }
 
@@ -99,6 +107,7 @@ function Movies() {
           setLocalMovies(moviesListModel.getFullList());
         })
         .catch((err) => {
+          setMessage({ type: 'error', text: 'Данный фильм не соответствует схеме данных!' });
           console.error(err);
         });
     } else {
@@ -116,9 +125,11 @@ function Movies() {
           );
           setLocalMovies(moviesListModel.getFullList());
         })
-        .catch(console.error);
+        .catch(() => {
+          setMessage({ type: 'error', text: 'Лайк не убран, т.к. его ставили не Вы. Или на сервере ошибка.' });
+          console.error()}
+          );
     }
-
   } 
 
   return (

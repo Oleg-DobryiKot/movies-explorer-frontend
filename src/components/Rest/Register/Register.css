@@ -88,6 +88,11 @@
   cursor: pointer;
 }
 
+.register__button-submit:disabled {
+  background: #767676;
+  cursor: pointer;
+}
+
 .register__signin {
   width: 100%;
   max-width: 358px;

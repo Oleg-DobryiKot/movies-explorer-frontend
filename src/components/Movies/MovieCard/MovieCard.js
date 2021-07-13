@@ -11,12 +11,16 @@ function getCardImage(card) {
   return DEFAULT_MOVIES_PATH+card.image.url;
 }
 
-function MovieCard({onCardClick, setMovieLike, card }) {
-  const PATH_IMG = getCardImage(card);
+function returnTrailerLink(card) {
+  if (card.canDelete) {
+    return card.trailer;
+  } 
+  return card.trailerLink;
+}
 
-  // function handleClick() {
-  //   onCardClick({ url, nameRU });
-  // }
+function MovieCard({ setMovieLike, card }) {
+  const PATH_IMG = getCardImage(card);
+  const PATH_TRAILER = returnTrailerLink(card);
 
   function handleLikeClick() {
     if (card.canDelete || card.isLiked) {
@@ -28,18 +32,15 @@ function MovieCard({onCardClick, setMovieLike, card }) {
 
   return (
     <div className="movie-card">
-      <img 
-        className="movie-card__image"
-        src={ PATH_IMG }
-        alt={ card.nameRU }
-        // onClick={ handleClick }
-      />
+      <a href={ PATH_TRAILER } target='_blank' rel="noreferrer">
+        <img 
+          className="movie-card__image"
+          src={ PATH_IMG }
+          alt={ card.nameRU }
+        />
+      </a>
       <div className="movie-card__description">
         <h3 className="movie-card__title">{ card.nameRU }</h3>
-        {/* todo:
-              make one button with different class depended from state
-              and owner
-         */}
         {!card.canDelete &&
           <button  
             type="button" 
