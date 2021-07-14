@@ -5,10 +5,10 @@ import ListModel from '../../utils/ListModel';
 import { getMovieCountOnScreen, getMovieCountMore } from '../../utils/utils';
 import { moviesApi, convertMovieToSavedMovie } from '../../utils/moviesAPI';
 import mainApi from '../../utils/mainApi';
-import { getLocalMovies, setLocalMovies } from '../../utils/moviesStorage';
+import { setLocalMovies } from '../../utils/moviesStorage';
 import { setLikedStatusToMovies, removeLocalSavedMovieById, setLocalSavedMovies, getLocalSavedMovieByMovieId, addLocalSavedMovie } from '../../utils/savedMoviesStorage';
 import { TooltipContext } from '../../contexts/TooltipContext';
-
+import { SHORT_FILM_DURATION } from '../../constants/movies-const';
 import SearchForm from './SearchForm/SearchForm';
 import MovieCardList from './MoviesCardList/MovieCardList';
 import MovieMore from './MovieMore/MovieMore';
@@ -37,10 +37,8 @@ function Movies() {
     });
   }, []);
 
-  useEffect(() => {
+  function loadMovies() {
     setIsLoading(true);
-    moviesListModel.setSearchFn(emptySearchFn);
-    moviesListModel.updateInitialList(getLocalMovies());
     const authToken = localStorage.getItem('jwt');
 
     Promise.all([
@@ -58,7 +56,7 @@ function Movies() {
         setMessage({ type: 'error', text: 'Возможно сервер не отвечает. Попробуйте повторить запрос позже!' });
       })
       .finally(() => setIsLoading(false));
-  }, []);
+  }
 
   function showMoreMovies() {
     moviesListModel.showMore(getMovieCountMore());
@@ -72,8 +70,12 @@ function Movies() {
       moviesListModel.setSearchFn(item => { 
         return item.nameRU.toLowerCase().includes(search.toLowerCase());
       });
-      if (!moviesListModel.viewList.length) {
-        setMessage({ type: 'info', text: 'Нет соответсвий данному запросу!' });
+      if (!moviesListModel.getFullList().length) {
+        loadMovies();
+      } else {
+        if (!moviesListModel.viewList.length) {
+          setMessage({ type: 'info', text: 'Нет соответсвий данному запросу!' });
+        }
       }
     }
   }
@@ -83,7 +85,7 @@ function Movies() {
       moviesListModel.setFilterFn(null);
     } else {
       moviesListModel.setFilterFn(item => {
-        return item.duration < 40;
+        return item.duration < SHORT_FILM_DURATION;
       });
     }
   }
@@ -126,9 +128,9 @@ function Movies() {
           setLocalMovies(moviesListModel.getFullList());
         })
         .catch(() => {
-          setMessage({ type: 'error', text: 'Лайк не убран, т.к. его ставили не Вы. Или на сервере ошибка.' });
+          setMessage({ type: 'error', text: 'При обновлении лайка произошла ошибка на сервере.' });
           console.error()}
-          );
+        );
     }
   } 
 

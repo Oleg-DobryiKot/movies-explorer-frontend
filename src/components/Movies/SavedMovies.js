@@ -6,6 +6,7 @@ import { getMovieCountOnScreen, getMovieCountMore } from '../../utils/utils';
 import mainApi from '../../utils/mainApi';
 import { getLocalSavedMovies, removeLocalSavedMovieById, setLocalSavedMovies } from '../../utils/savedMoviesStorage';
 import { dislikeLocalMovie } from '../../utils/moviesStorage';
+import { SHORT_FILM_DURATION } from '../../constants/movies-const';
 
 import SearchForm from './SearchForm/SearchForm';
 import MovieCardList from './MoviesCardList/MovieCardList';
@@ -73,7 +74,7 @@ function SavedMovies() {
       moviesListModel.setFilterFn(null);
     } else {
       moviesListModel.setFilterFn(item => {
-        return item.duration < 40;
+        return item.duration < SHORT_FILM_DURATION;
       });
     }
   }

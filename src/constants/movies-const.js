@@ -1,0 +1,9 @@
+export const SHORT_FILM_DURATION = 40;
+export const MOVIES_ADD_ON_SCREEN_SMALL = 2;
+export const MOVIES_ADD_ON_SCREEN_MEDIUM = 2;
+export const MOVIES_ADD_ON_SCREEN_LARGE = 3;
+export const MOVIES_ADD_ON_SCREEN_EXTRALARGE = 4;
+export const MOVIE_COUNT_SMALL = 5;
+export const MOVIE_COUNT_MEDIUM = 8;
+export const MOVIE_COUNT_LARGE = 12;
+export const MOVIE_COUNT_EXTRALARGE = 16;

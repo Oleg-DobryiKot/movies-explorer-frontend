@@ -21,7 +21,7 @@ function getTooltipLogo(message) {
 function Tooltip() {
   const { message, setMessage } = useContext(TooltipContext);
 
-  if (message) {
+  if (message && message.type !== 'error') {
     setTimeout(() => setMessage(null), 3000);
   }
 

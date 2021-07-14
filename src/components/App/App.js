@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import 'react-dom';
-
 import './App.css';
 import Header from '../Markup/Header/Header';
 import Main from '../Markup/Main/Main';
@@ -18,7 +17,8 @@ import { TooltipContext } from '../../contexts/TooltipContext';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import * as auth from '../../utils/auth';
 import mainApi from '../../utils/mainApi';
-
+import { removeLocalSavedMovies } from '../../utils/savedMoviesStorage';
+import { removeLocalMovies } from '../../utils/moviesStorage';
 
 function App() {
   const initialData = { email: '', password: ''};
@@ -26,11 +26,10 @@ function App() {
 
   const [currentUser, setCurrentUser] = useState(null);
   const [loggedIn, setLoggedIn] = useState(false);
+  const [tokenChecked, setTokenChecked] = useState(false);
   const [isRegistered, setIsRegistered] = useState(false);
 
   const [tooltipMessage, setTooltipMessage] = useState(null);
-
-  
   
   useEffect(() => {
     getUserDataByToken()
@@ -41,16 +40,17 @@ function App() {
             .then(info => {
               setCurrentUser(info);
               setLoggedIn(true);
-              history.push('/movies');
             })
             .catch(err => {
               console.error(err);
-            });
+            })
+            .finally(() => setTokenChecked(true));
         } else {
+          setTokenChecked(true);
           history.push('/');
         } 
       })
-  }, [loggedIn]);
+  }, []);
 
   const getUserDataByToken = () => {
     return new Promise((resolve) => {
@@ -83,38 +83,34 @@ function App() {
               localStorage.setItem('jwt', res.token);
               setCurrentUser(info);
               setLoggedIn(true);
+              setTooltipMessage({ type: 'info', text: 'Поздравляем, логин успешный!' });
               history.push('/movies');
             })
-            .catch(console.error);
+            .catch(err => setTooltipMessage({
+              type: 'error',
+              text: err.message || 'Что-то пошло не так!'
+            }));
         }
       });
   }
 
   function handleRegister({ name, email, password }) {
     return auth.register(name, email, password)
-      .then(res => {
-        if (res.status === 200) {
-          return res.json();
-        }
-        return Promise.reject(res);
-      })
       .then(data => {
         setIsRegistered(true);
         handleLogin({ email, password });
         return data;
       })
-      .catch((res) => {
+      .catch((error) => {
         setIsRegistered(false);
-        if (res.status === 401) {
-          setTooltipMessage({ type: 'error', text: 'Такой пользователь уже зарегестрирован!' });
-        } else {
-          setTooltipMessage({ type: 'error', text: 'Что-то не так с запросом на сервер!' });
-        }
-      })
+        setTooltipMessage({ type: 'error', text: error.message || 'Что то пошло не так!' });
+      });
   }
 
   function handleLoggedOut() {
     localStorage.removeItem('jwt');
+    removeLocalSavedMovies();
+    removeLocalMovies();
     setCurrentUser(initialData);
     setLoggedIn(false);    
     history.push('/');
@@ -124,34 +120,38 @@ function App() {
     <div className="page">
       <CurrentUserContext.Provider value={{ user: currentUser, setUser: setCurrentUser }}>       
       <TooltipContext.Provider value={{ message: tooltipMessage, setMessage: setTooltipMessage }}>
-      <Header loggedIn={ loggedIn } /> 
-        <Switch>
-          <Route exact path="/"> 
-            <Main/>
-          </Route>
-          <ProtectedRoute path="/profile" 
-            loggedIn={ loggedIn }
-            onLoggedOut={ handleLoggedOut }
-            component={ Profile }
-          />
-          <ProtectedRoute path="/movies"
-            loggedIn={ loggedIn }
-            component={ Movies }
-          />
-          <ProtectedRoute path="/saved-movies"
-            loggedIn={ loggedIn }
-            component={ SavedMovies }
-          />
-          <Route path="/signup">
-            <Register onRegister={ handleRegister }/>
-          </Route>
-          <Route path="/signin">
-            <Login onLogin={ handleLogin }/>
-          </Route>
-          <Route path="/error">
-            <NotFoundError/>
-          </Route>
-        </Switch> 
+      <Header loggedIn={ loggedIn } />
+        {
+          tokenChecked
+            ? (
+              <Switch>
+                <Route exact path="/"> 
+                  <Main/>
+                </Route>
+                <ProtectedRoute path="/profile" 
+                  loggedIn={ loggedIn }
+                  onLoggedOut={ handleLoggedOut }
+                  component={ Profile }
+                />
+                <ProtectedRoute path="/movies"
+                  loggedIn={ loggedIn }
+                  component={ Movies }
+                />
+                <ProtectedRoute path="/saved-movies"
+                  loggedIn={ loggedIn }
+                  component={ SavedMovies }
+                />
+                <Route path="/signup">
+                  <Register onRegister={ handleRegister }/>
+                </Route>
+                <Route path="/signin">
+                  <Login onLogin={ handleLogin }/>
+                </Route>
+                <Route render={ NotFoundError } />
+              </Switch> 
+            )
+            : null
+        }
       <Footer/>
       <Tooltip/>
       </TooltipContext.Provider>

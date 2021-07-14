@@ -1,9 +1,10 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import logo from '../../../images/logo/logo.svg';
 import './Register.css';
-import { TooltipContext } from '../../../contexts/TooltipContext';
+// import { TooltipContext } from '../../../contexts/TooltipContext';
 import { useFormWithValidation } from '../restFormValidation';
+import Preloader from '../../Movies/Preloader/Preloader';
 
 export default function Register({ onRegister }) {
   const initialData = {
@@ -13,48 +14,20 @@ export default function Register({ onRegister }) {
   };
 
   const { values, handleChange, errors, isValid, resetForm } = useFormWithValidation(initialData);
-  const { setMessage } = useContext(TooltipContext);
+  // const { setMessage } = useContext(TooltipContext);
   const history = useHistory();
+  const [isLoading, setIsLoading] = useState(false);
   
-  // const handleChange = (event) => {
-  //   const {name, value} = event.target;
-  //   setData(data => ({
-  //     ...data,
-  //     [name]: value,
-  //   }));
-  // }
-
-  // const resetForm = () => setData(initialData);
-
   const handleSubmit = (event) => {
     event.preventDefault();
-    // if (!values.name) {
-    //   setMessage({ type: 'error', text: 'Не введено имя!' });
-    //   return;
-    // }
-    // if (!values.email) {
-    //   setMessage({ type: 'error', text: 'Не введен email!' });
-    //   return;
-    // }
-    // if (!values.password) {
-    //   setMessage({ type: 'error', text: 'Не введен пароль!' });
-    //   return;
-    // }
-    // debugger;
     if (!isValid) {
       return;
     }
-
+    setIsLoading(true);
     onRegister(values)
-      .then(() => {
-        setMessage({ type: 'info', text: 'Вы успешно зарегестрировались!' });
-        resetForm();
-        history.push('/movies');
+      .finally(() => {
+        setIsLoading(false);
       })
-      .catch(err => setMessage({
-        type: 'error',
-        text: err.message || 'Что-то пошло не так!'
-      }));
   }
 
   return (
@@ -72,7 +45,7 @@ export default function Register({ onRegister }) {
 
       <form className="register__form" onSubmit={ handleSubmit }>
         <fieldset className="register__field">
-          <label className="register__label">Имя</label>  {/* value={data.name} */}
+          <label className="register__label">Имя</label>
           <input className="register__input" required id="username" name="name" type="text" placeholder="Олег" value={values.name} onChange={ handleChange } />
           <span className={`register__error${ errors.name ? ' register__error_visible' : '' }`}>
             { errors.name || '&nbsp;' }
@@ -92,11 +65,11 @@ export default function Register({ onRegister }) {
             { errors.password || '&nbsp;' }
           </span>
         </fieldset>
+        {isLoading && <Preloader />}
         <div className="register__button-container">
-            <button onSubmit={ handleSubmit } type="submit" disabled={ !isValid } className="register__button-submit">Зарегистрироваться</button>
+            <button onSubmit={ handleSubmit } type="submit" disabled={ !isValid || isLoading } className="register__button-submit">Зарегистрироваться</button>
         </div>
       </form>
-
       <div className="register__signin">
         <p>Уже зарегистрированы? 
           <Link to="/signin" className="register__link">Войти</Link>

@@ -1,48 +1,47 @@
 import React from 'react';
 import PopupForm from '../PopupForm/PopupForm';
-import { useState, useEffect, useContext } from 'react';
+import { useEffect, useContext } from 'react';
 import 'react-dom';
 import { CurrentUserContext } from '../../../../contexts/CurrentUserContext';
+import { useFormWithValidation } from '../../../Rest/restFormValidation';
+
 import './EditProfilePopup.css';
 
 function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const currentUser = useContext(CurrentUserContext);
+  const { user, setUser } = useContext(CurrentUserContext);
+  const initialData = {
+    email: user.email,
+    name: user.name,
+  };
 
-  function handleNameChange(event) {
-    setName(event.target.value);
-  }
+  const { values, handleChange, errors, isValid, isChanged } = useFormWithValidation(initialData);
 
-  function handleEmailChange(event) {
-    setEmail(event.target.value);
-  }
-
-  function handleSubmit(event) {
+  const handleSubmit = (event) => {
     event.preventDefault();
-    onUpdateUser({
-      name: name,
-      email: email,
-    });
-  } 
+    if (!isValid) {
+      return;
+    }
+    onUpdateUser(values);
+  }
 
   useEffect(() => {
-    setName(currentUser.name || '');
-    setEmail(currentUser.email || '');
-  }, [currentUser]); 
+    setUser(values);
+  }, [user]); 
 
   return (
     <PopupForm
       name="profile"
       title="Редактировать профиль"
       isOpen={ isOpen }
+      isValid={ isValid }
+      isChanged={ isChanged }
       onClose={ onClose }
       onSubmit={ handleSubmit }
     >
     <input
       type="text"
-      value={ name }
-      onChange={ handleNameChange }
+      value={ values.name }
+      onChange={ handleChange }
       placeholder="Имя"
       name="name"
       className="popup__input-text"
@@ -50,17 +49,17 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
       maxLength="40"
       required
     />
-    <span className="popup__error">Введите имя</span>
+    <span className={`popup__error ${ errors.name ? ' popup__error_visible' : '' }`}>Введите имя</span>
     <input
       type="email"
-      value={ email }
-      onChange={ handleEmailChange }
+      value={ values.email }
+      onChange={ handleChange }
       placeholder="E-mail"
       name="email"
       className="popup__input-text"
       required
     />
-    <span className="popup__error">Введите Email</span>
+    <span className={`popup__error ${ errors.email ? ' popup__error_visible' : '' }`}>Введите Email</span>
   </PopupForm>
   );
 }

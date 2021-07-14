@@ -4,6 +4,10 @@ export function getLocalMovies() {
   return JSON.parse(localStorage.getItem(MOVIES_STORAGE_KEY)) || [];
 };
 
+export function removeLocalMovies() {
+  localStorage.removeItem(MOVIES_STORAGE_KEY);
+}
+
 export function setLocalMovies(savedMovies) {
   localStorage.setItem(MOVIES_STORAGE_KEY, JSON.stringify(savedMovies));
 };

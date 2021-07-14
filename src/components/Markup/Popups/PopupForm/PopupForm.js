@@ -1,7 +1,8 @@
 import React from 'react';
+
 import './PopupForm.css';
 
-function PopupForm({title, name, submitText='Сохранить', children, isOpen, onClose, onSubmit}) {
+function PopupForm({title, name, submitText='Сохранить', children, isOpen, isValid, isChanged, onClose, onSubmit}) {
   return (
     <section className={ `popup ${ isOpen ? 'popup_is-opened' : '' }` }>
       <div className="popup__container">
@@ -15,6 +16,7 @@ function PopupForm({title, name, submitText='Сохранить', children, isOp
             { children }
             <button 
               type="submit"
+              disabled={ !isValid || !isChanged }
               className={`popup__input-btn`}>
               { submitText }
             </button>

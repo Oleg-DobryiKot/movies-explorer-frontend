@@ -2,12 +2,16 @@ import React from 'react';
 import { useState, useContext } from 'react';
 import 'react-dom';
 import { CurrentUserContext } from '../../../contexts/CurrentUserContext';
+import { TooltipContext } from '../../../contexts/TooltipContext';
+
 import './Profile.css';
 import EditProfilePopup from '../../Markup/Popups/EditProfilePopup/EditProfilePopup';
 import mainApi from '../../../utils/mainApi';
 
 export default function Profile({ onLoggedOut }) {
   const { user, setUser } = useContext(CurrentUserContext);
+  const { setMessage } = useContext(TooltipContext);
+
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
 
   function handleEditProfileClick() {
@@ -23,8 +27,12 @@ export default function Profile({ onLoggedOut }) {
     mainApi.sendUserInfo(userData, authToken)
       .then((user) => {
         setUser(user);
+        setMessage({ type: 'info', text: 'Вы успешно изменили свои данные!' });
       })
-      .catch(console.error);
+      .catch(err => setMessage({
+        type: 'error',
+        text: err.message || 'Что-то пошло не так!'
+      }));
     setIsEditProfilePopupOpen(false);
   }
 
@@ -50,6 +58,6 @@ export default function Profile({ onLoggedOut }) {
         onUpdateUser={ handleUpdateUser } 
       />
     </div>
-    )
+  )
 }
 
