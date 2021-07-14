@@ -1,8 +1,7 @@
-import React, { useState, useContext } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import logo from '../../../images/logo/logo.svg';
 import './Register.css';
-// import { TooltipContext } from '../../../contexts/TooltipContext';
 import { useFormWithValidation } from '../restFormValidation';
 import Preloader from '../../Movies/Preloader/Preloader';
 
@@ -13,9 +12,7 @@ export default function Register({ onRegister }) {
     name: ''
   };
 
-  const { values, handleChange, errors, isValid, resetForm } = useFormWithValidation(initialData);
-  // const { setMessage } = useContext(TooltipContext);
-  const history = useHistory();
+  const { values, handleChange, errors, isValid } = useFormWithValidation(initialData);
   const [isLoading, setIsLoading] = useState(false);
   
   const handleSubmit = (event) => {

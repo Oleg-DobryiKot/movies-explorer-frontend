@@ -2,15 +2,12 @@ import React, { useState, useContext } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import './Login.css';
 import logo from '../../../images/logo/logo.svg';
-import { TooltipContext } from '../../../contexts/TooltipContext';
 import { useFormWithValidation } from '../restFormValidation';
 import Preloader from '../../Movies/Preloader/Preloader';
 export default function Login({ onLogin }) {
  
   const initialData = { password: '', email: '' };
-  const { values, handleChange, errors, isValid, resetForm } = useFormWithValidation(initialData);
-  const { setMessage } = useContext(TooltipContext);
-  const history = useHistory();
+  const { values, handleChange, errors, isValid } = useFormWithValidation(initialData);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = (event) => {
@@ -25,15 +22,6 @@ export default function Login({ onLogin }) {
       .finally(() => {
         setIsLoading(false);
       });
-      // .then(() => {
-      //   setMessage({ type: 'info', text: 'Поздравляем, логин успешный!' });
-      //   resetForm();
-      //   history.push('/movies');
-      // })
-      // .catch(err => setMessage({
-      //   type: 'error',
-      //   text: err.message || 'Что-то пошло не так!'
-      // }));
   }
 
   return(
