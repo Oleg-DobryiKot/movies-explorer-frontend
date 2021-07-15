@@ -32,10 +32,10 @@ function SavedMovies() {
   }, []);
 
   useEffect(() => {
-    setIsLoading(true);
     const authToken = localStorage.getItem('jwt');
     moviesListModel.setSearchFn(null);
     moviesListModel.updateInitialList(getLocalSavedMovies());
+    setIsLoading(true);
     mainApi.getSavedMovies(authToken)
       .then((movieSavedCards) => {
         const savedMovies = movieSavedCards

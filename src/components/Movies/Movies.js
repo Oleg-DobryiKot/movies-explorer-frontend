@@ -5,7 +5,7 @@ import ListModel from '../../utils/ListModel';
 import { getMovieCountOnScreen, getMovieCountMore } from '../../utils/utils';
 import { moviesApi, convertMovieToSavedMovie } from '../../utils/moviesAPI';
 import mainApi from '../../utils/mainApi';
-import { setLocalMovies } from '../../utils/moviesStorage';
+import { setLocalMovies, getLocalMovies } from '../../utils/moviesStorage';
 import { setLikedStatusToMovies, removeLocalSavedMovieById, setLocalSavedMovies, getLocalSavedMovieByMovieId, addLocalSavedMovie } from '../../utils/savedMoviesStorage';
 import { TooltipContext } from '../../contexts/TooltipContext';
 import { SHORT_FILM_DURATION } from '../../constants/movies-const';
@@ -46,7 +46,13 @@ function Movies() {
       mainApi.getSavedMovies(authToken),
     ])
       .then(([ movies, savedMovies ]) => {
-        setLocalSavedMovies(savedMovies);
+        const savedMoviesModel = savedMovies
+          .map((savedModel) => ({
+          ...savedModel,
+          canDelete: true,
+        }));
+        setLocalSavedMovies(savedMoviesModel);
+        
         const likedMoviesModel = setLikedStatusToMovies(movies);
         setLocalMovies(likedMoviesModel);
         
@@ -70,9 +76,10 @@ function Movies() {
       moviesListModel.setSearchFn(item => { 
         return item.nameRU.toLowerCase().includes(search.toLowerCase());
       });
-      if (!moviesListModel.getFullList().length) {
+      if (!getLocalMovies().length) {
         loadMovies();
       } else {
+        moviesListModel.updateInitialList(getLocalMovies());
         if (!moviesListModel.viewList.length) {
           setMessage({ type: 'info', text: 'Нет соответсвий данному запросу!' });
         }
