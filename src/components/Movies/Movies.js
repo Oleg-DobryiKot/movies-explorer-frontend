@@ -14,12 +14,22 @@ import MovieCardList from './MoviesCardList/MovieCardList';
 import MovieMore from './MovieMore/MovieMore';
 
 const emptySearchFn = () => false;
+const createSearchFn = (searchReq) => {
+  if (!searchReq) {
+    return emptySearchFn;
+  }
+  return item => { 
+    return item.nameRU.toLowerCase().includes(searchReq.toLowerCase());
+  }
+}
 
 function Movies() {
+  const initSearch = useMemo(() => localStorage.getItem('searchRequest'), []);
+
   const moviesListModel = useMemo(
     () => {
       const listModel = new ListModel([], getMovieCountOnScreen());
-      listModel.setSearchFn(emptySearchFn);
+      listModel.setSearchFn(createSearchFn(initSearch));
       return listModel;
     },
     [],
@@ -31,6 +41,7 @@ function Movies() {
   const { setMessage } = useContext(TooltipContext);
 
   useEffect(() => {
+    loadMovies();
     return moviesListModel.onViewListChange(updatedList => {
       setCardList(updatedList);
       setShowMore(moviesListModel.canShowMore);      
@@ -143,7 +154,8 @@ function Movies() {
 
   return (
     <section className="movies">
-      <SearchForm 
+      <SearchForm
+        initSearch={ initSearch }
         onSearch={ onSearch }
         onShortFilmsChecked={ onShortFilmsChecked }
       />

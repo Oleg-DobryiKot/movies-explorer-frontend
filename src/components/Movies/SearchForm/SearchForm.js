@@ -1,12 +1,20 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import './SearchForm.css';
 
-function SearchForm({ onSearch, onShortFilmsChecked }) {
+function SearchForm({ onSearch, onShortFilmsChecked, initSearch }) {
   const searchRef = useRef(null);
 
+  useEffect(() => searchRef.current.value = initSearch, []);
+
   function onSearchSubmit(event) {
+    const searchRequest = searchRef.current.value;
     event.preventDefault();
-    onSearch(searchRef.current.value);
+    if (searchRequest.length) {
+      localStorage.setItem('searchRequest', searchRequest);
+    } else {
+      localStorage.removeItem('searchRequest');
+    }
+    onSearch(searchRequest);
   }
 
   return (

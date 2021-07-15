@@ -75,7 +75,7 @@ export default class ListModel {
     };
   }
 
-  _updateViewList() {   
+  _updateViewList() {  
     this._filteredList = this._initialList
       .filter(this._listFilterFn || (() => true))
       .filter(this._listSearchFn || (() => true))

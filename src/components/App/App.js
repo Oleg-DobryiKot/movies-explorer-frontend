@@ -109,6 +109,7 @@ function App() {
 
   function handleLoggedOut() {
     localStorage.removeItem('jwt');
+    localStorage.removeItem('searchRequest');
     removeLocalSavedMovies();
     removeLocalMovies();
     setCurrentUser(initialData);
