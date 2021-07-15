@@ -1,8 +1,7 @@
 import './NotFoundError.css';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 function NotFoundError() {
-  const history = useHistory();
 
   return (
     <section className="error__page">
@@ -10,7 +9,7 @@ function NotFoundError() {
         <p className="error__page_title">404</p>
         <p className="error__page_subtitle">Страница не найдена</p>
       </div>
-      <Link to={ () => history.goBack() } className="error__page_back-link">{ 'Назад' }</Link>
+      <Link to={'/'} className="error__page_back-link">{ 'Назад' }</Link>
     </section>  
   )
 }
