@@ -99,6 +99,7 @@ function SavedMovies() {
   return (
     <section className="movies">
       <SearchForm 
+        initSearch={ '' }
         onSearch={ onSearch }
         onShortFilmsChecked={ onShortFilmsChecked }
       />
