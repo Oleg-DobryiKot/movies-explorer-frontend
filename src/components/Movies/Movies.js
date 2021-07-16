@@ -84,9 +84,8 @@ function Movies() {
       setMessage({ type: 'error', text: 'Необходимо ввести поисковый запрос!' });
       moviesListModel.setSearchFn(emptySearchFn);
     } else {
-      moviesListModel.setSearchFn(item => { 
-        return item.nameRU.toLowerCase().includes(search.toLowerCase());
-      });
+      moviesListModel.setSearchFn(createSearchFn(search));
+      }
       if (!getLocalMovies().length) {
         loadMovies();
       } else {
@@ -94,8 +93,7 @@ function Movies() {
         if (!moviesListModel.viewList.length) {
           setMessage({ type: 'info', text: 'Нет соответсвий данному запросу!' });
         }
-      }
-    }
+      }   
   }
 
   function onShortFilmsChecked(checked) {
