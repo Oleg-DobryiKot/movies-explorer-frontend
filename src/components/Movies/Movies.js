@@ -153,7 +153,7 @@ function Movies() {
   return (
     <section className="movies">
       <SearchForm
-        initSearch={ initSearch }
+        initSearch={ initSearch || '' }
         onSearch={ onSearch }
         onShortFilmsChecked={ onShortFilmsChecked }
       />
