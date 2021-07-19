@@ -2,22 +2,29 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../../../images/logo/logo.svg';
 import './Register.css';
+import { useFormWithValidation } from '../restFormValidation';
+import Preloader from '../../Movies/Preloader/Preloader';
 
-export default function Register() {
+export default function Register({ onRegister }) {
   const initialData = {
     password: '',
     email: '',
     name: ''
   };
 
-  const [data, setData] = useState(initialData);
+  const { values, handleChange, errors, isValid } = useFormWithValidation(initialData);
+  const [isLoading, setIsLoading] = useState(false);
   
-  const handleChange = (event) => {
-    const {name, value} = event.target;
-    setData(data => ({
-      ...data,
-      [name]: value,
-    }));
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (!isValid) {
+      return;
+    }
+    setIsLoading(true);
+    onRegister(values)
+      .finally(() => {
+        setIsLoading(false);
+      })
   }
 
   return (
@@ -33,27 +40,33 @@ export default function Register() {
         Добро пожаловать!
       </p>
 
-      <form className="register__form">
+      <form className="register__form" onSubmit={ handleSubmit }>
         <fieldset className="register__field">
           <label className="register__label">Имя</label>
-          <input className="register__input" id="username" name="username" type="text" placeholder="Олег" value={data.name} onChange={ handleChange } />
-          <span className="register__error">Имя нужно заполнить!</span>
+          <input className="register__input" required id="username" name="name" type="text" placeholder="Олег" value={values.name} onChange={ handleChange } />
+          <span className={`register__error${ errors.name ? ' register__error_visible' : '' }`}>
+            { errors.name || '&nbsp;' }
+          </span>
         </fieldset>
         <fieldset className="register__field">
           <label className="register__label">E-mail</label>
-          <input className="register__input" id="email" name="email" type="email" placeholder="Email:" value={data.email} onChange={ handleChange } />
-          <span className="register__error register__error_visible">Тут должен быть валидный email</span>
+          <input className="register__input" required id="email" name="email" type="email" placeholder="Email:" value={values.email} onChange={ handleChange } />
+          <span className={`register__error${ errors.email ? ' register__error_visible' : '' }`}>
+            { errors.email || '&nbsp;' }
+          </span>
         </fieldset>
         <fieldset className="register__field">
           <label className="register__label">Пароль</label>
-          <input className="register__input" id="password" name="password" type="password" placeholder="Пароль:" value={data.password} onChange={ handleChange } />
-          <span className="register__error">Что-то пошло не так</span>
+          <input className="register__input" required id="password" name="password" type="password" placeholder="Пароль:" value={values.password} onChange={ handleChange } />
+          <span className={`register__error${ errors.password ? ' register__error_visible' : '' }`}>
+            { errors.password || '&nbsp;' }
+          </span>
         </fieldset>
+        {isLoading && <Preloader />}
         <div className="register__button-container">
-            <button type="submit" className="register__button-submit">Зарегистрироваться</button>
+            <button onSubmit={ handleSubmit } type="submit" disabled={ !isValid || isLoading } className="register__button-submit">Зарегистрироваться</button>
         </div>
       </form>
-
       <div className="register__signin">
         <p>Уже зарегистрированы? 
           <Link to="/signin" className="register__link">Войти</Link>
@@ -61,5 +74,4 @@ export default function Register() {
       </div>
     </div>
   );
-
 }

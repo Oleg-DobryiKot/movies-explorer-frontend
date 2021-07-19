@@ -1,63 +1,64 @@
-import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React from 'react';
 import './MovieCard.css';
+import { getFormatedTimeFromMins } from '../../../utils/utils';
 
-function MovieCard({onCardClick, onCardLike, link, name, duration }) {
+const DEFAULT_MOVIES_PATH = 'https://api.nomoreparties.co';
 
-  const [isLiked, setIsLiked] = useState(false); 
-  const location = useLocation();
-  const [showDelete, setShowDelete] = useState(false); 
-  
-  const cardLikeButtonClassName = (
-    `movie-card__like-icon ${isLiked ? 'movie-card__like-icon_active' : ''}`); 
+function getCardImage(card) {
+  if (card.canDelete) {
+    return card.image;
+  } 
+  return DEFAULT_MOVIES_PATH+card.image.url;
+}
 
-  useEffect(() => {
-    (location.pathname === "/movies") ? setShowDelete(false) : setShowDelete(true);
-  }, [location]);
-    
-  function handleClick() {
-    onCardClick({link, name});
-  }
+function returnTrailerLink(card) {
+  if (card.canDelete) {
+    return card.trailer;
+  } 
+  return card.trailerLink;
+}
+
+function MovieCard({ setMovieLike, card }) {
+  const PATH_IMG = getCardImage(card);
+  const PATH_TRAILER = returnTrailerLink(card);
 
   function handleLikeClick() {
-    if (!isLiked) {
-      setIsLiked(true);
-      return;
+    if (card.canDelete || card.isLiked) {
+      setMovieLike(false);
+    } else {
+      setMovieLike(true);
     }
-    setIsLiked(false);
   }
 
   return (
     <div className="movie-card">
-      <img 
-        className="movie-card__image"
-        src={ link }
-        alt={ name }
-        onClick={ handleClick }
-      />
+      <a href={ PATH_TRAILER } target='_blank' rel="noreferrer">
+        <img 
+          className="movie-card__image"
+          src={ PATH_IMG }
+          alt={ card.nameRU }
+        />
+      </a>
       <div className="movie-card__description">
-        <h3 className="movie-card__title">{ name }</h3>
-        {/* todo:
-              make one button with different class depended from state
-              and owner
-         */}
-        {!showDelete &&
+        <h3 className="movie-card__title">{ card.nameRU }</h3>
+        {!card.canDelete &&
           <button  
             type="button" 
-            className={ cardLikeButtonClassName }
+            className={ `movie-card__like-icon ${card.isLiked ? 'movie-card__like-icon_active' : ''}` }
             onClick={ handleLikeClick }
           >
           </button>
         }
-        {showDelete &&
+        {card.canDelete &&
           <button  
             type="button" 
             className="movie-card__delete-btn"
+            onClick={ handleLikeClick }
           >
           </button>
         }
       </div>
-      <div className="movie-card__duration">{ duration }</div>
+      <div className="movie-card__duration">{ getFormatedTimeFromMins(card.duration) }</div>
     </div>
   )
 }
